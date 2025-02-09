@@ -1,6 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { User, UserDocument } from '../model/user.schema';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -29,7 +29,7 @@ export class UserService {
     if (foundUser) {
       const { password } = foundUser;
       if (await bcrypt.compare(user.password, password)) {
-        const payload = { email: user.email };
+        const payload = { username: user.username };
         return {
           token: jwt.sign(payload),
         };
@@ -45,8 +45,8 @@ export class UserService {
     );
   }
 
-  async getOne(email): Promise<User> {
-    const user = await this.userModel.findOne({ email }).exec();
+  async getOne(username): Promise<User & Document> {
+    const user = await this.userModel.findOne({ username }).exec();
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
