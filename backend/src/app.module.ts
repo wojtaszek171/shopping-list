@@ -1,4 +1,4 @@
-import { Module, RequestMethod, MiddlewareConsumer } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,11 +10,16 @@ import { secret } from './utils/constants';
 import { join } from 'path/posix';
 import { JwtModule } from '@nestjs/jwt';
 import { isAuthenticated } from './app.middleware';
+import { configDotenv } from 'dotenv';
+
+configDotenv();
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    MongooseModule.forRoot('mongodb://192.168.1.72:27017/shoppinglist'),
+    MongooseModule.forRoot(
+      `mongodb://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@${process.env.MONGO_DB_HOST}:${process.env.MONGO_DB_PORT}/${process.env.MONGO_DB_NAME}`,
+    ),
     JwtModule.register({
       secret,
       signOptions: { expiresIn: '2h' },
@@ -28,11 +33,10 @@ import { isAuthenticated } from './app.middleware';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(isAuthenticated)
-      // .exclude(
-      //   { path: 'api/v1/video/:id', method: RequestMethod.GET }
-      // )
-      // .forRoutes(VideoController);
+    consumer.apply(isAuthenticated);
+    // .exclude(
+    //   { path: 'api/v1/video/:id', method: RequestMethod.GET }
+    // )
+    // .forRoutes(VideoController);
   }
 }

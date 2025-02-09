@@ -1,8 +1,12 @@
 import { ButtonHTMLAttributes } from "react";
 import "./Button.scss";
 
-const Button = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
-  return <button className="styled-button" {...props} />;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  className?: string;
+}
+
+const Button = ({ className, ...props }: ButtonProps) => {
+  return <button className={`styled-button ${className}`} {...props} />;
 };
 
 export default Button;

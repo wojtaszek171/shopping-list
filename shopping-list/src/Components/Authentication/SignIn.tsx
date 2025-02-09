@@ -1,43 +1,39 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
+import Input from "../Input";
+import { signIn } from "../../services/api";
 
-const SignIn: React.FC = () => {
+const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { t } = useTranslation();
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Handle SignIn logic here
-    console.log("Username:", username);
-    console.log("Password:", password);
+  const handleSignIn = () => {
+    signIn({ username, password }).catch((error) => {
+      setError(error.response.data.message);
+    });
   };
 
   return (
-    <div>
+    <div className="sign-in-component">
       <h2>{t("signIn")}</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">{t("username")}</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">{t("password")}</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <Button type="submit">{t("signIn")}</Button>
-      </form>
+      <Input
+        label={t("username")}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <Input
+        label={t("password")}
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      {error && <span className="error-message">{error}</span>}
+      <Button className="submit-button" onClick={handleSignIn}>
+        {t("signIn")}
+      </Button>
     </div>
   );
 };

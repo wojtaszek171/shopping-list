@@ -1,50 +1,68 @@
-import { FormEventHandler, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
+import Input from "../Input";
+import { signUp } from "../../services/api";
 
 const SignUp = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
+  const [fullname, setFullName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { t } = useTranslation();
+  const [error, setError] = useState("");
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    // Handle sign up logic here
+  const handleSignUp = () => {
+    if (password !== confirmPassword) {
+      setError(t("passwordsDoNotMatch"));
+      return;
+    }
+
+    signUp({
+      email,
+      fullname,
+      username,
+      password,
+    }).catch((error) => {
+      setError(error.response.data.message);
+    });
   };
 
   return (
     <div className="sign-up-component">
       <h2>{t("signUp")}</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>{t("username")}</label>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>{t("password")}</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>{t("confirmPassword")}</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <Button type="submit">{t("signUp")}</Button>
-      </form>
+      <Input
+        label={t("fullName")}
+        value={fullname}
+        onChange={(e) => setFullName(e.target.value)}
+      />
+      <Input
+        label={t("email")}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <Input
+        label={t("username")}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <Input
+        label={t("password")}
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <Input
+        label={t("confirmPassword")}
+        type="password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      {error && <span className="error-message">{error}</span>}
+      <Button className="submit-button" onClick={handleSignUp}>
+        {t("signUp")}
+      </Button>
     </div>
   );
 };

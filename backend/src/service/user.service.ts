@@ -16,6 +16,7 @@ export class UserService {
       fullname: user.fullname,
       email: user.email,
       password: hash,
+      username: user.username,
     };
     const newUser = new this.userModel(reqBody);
     return newUser.save();
@@ -23,7 +24,7 @@ export class UserService {
 
   async signin(user: User, jwt: JwtService): Promise<any> {
     const foundUser = await this.userModel
-      .findOne({ email: user.email })
+      .findOne({ username: user.username })
       .exec();
     if (foundUser) {
       const { password } = foundUser;

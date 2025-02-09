@@ -1,0 +1,33 @@
+.authentication-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .authentication-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .authentication-switch {
+    font-size: 14px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: blue;
+  }
+
+  .sign-in-component,
+  .sign-up-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .submit-button {
+      margin-top: 20px;
+    }
+
+    .error-message {
+      color: orange;
+      margin-top: 20px;
+    }
+  }
+}
