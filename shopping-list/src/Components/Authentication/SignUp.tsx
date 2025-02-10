@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import Input from "../Input";
-import { signUp } from "../../services/api";
+import {
+  useLazyCheckSessionQuery,
+  useSignUpMutation,
+} from "../../services/api/user.api";
 
 const SignUp = () => {
   const { t } = useTranslation();
@@ -12,6 +15,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [signUp, { isSuccess, error: signUpError }] = useSignUpMutation();
+  const [checkSession] = useLazyCheckSessionQuery();
 
   const handleSignUp = () => {
     if (password !== confirmPassword) {
@@ -24,10 +29,20 @@ const SignUp = () => {
       fullname,
       username,
       password,
-    }).catch((error) => {
-      setError(error.response.data.message);
     });
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      checkSession();
+    }
+  }, [checkSession, isSuccess]);
+
+  useEffect(() => {
+    if (signUpError) {
+      setError(signUpError?.data?.message);
+    }
+  }, [signUpError]);
 
   return (
     <div className="sign-up-component">

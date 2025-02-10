@@ -1,20 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import Input from "../Input";
-import { signIn } from "../../services/api";
+import {
+  useLazyCheckSessionQuery,
+  useSignInMutation,
+} from "../../services/api/user.api";
 
 const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const { t } = useTranslation();
+  const [signIn, { error, isSuccess }] = useSignInMutation();
+  const [checkSession] = useLazyCheckSessionQuery();
 
   const handleSignIn = () => {
-    signIn({ username, password }).catch((error) => {
-      setError(error.response.data.message);
-    });
+    signIn({ username, password });
   };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      handleSignIn();
+    }
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      checkSession();
+    }
+  }, [checkSession, isSuccess]);
 
   return (
     <div className="sign-in-component">
@@ -29,8 +43,9 @@ const SignIn = () => {
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onKeyDown={onKeyDown}
       />
-      {error && <span className="error-message">{error}</span>}
+      {error && <span className="error-message">{error?.data?.message}</span>}
       <Button className="submit-button" onClick={handleSignIn}>
         {t("signIn")}
       </Button>

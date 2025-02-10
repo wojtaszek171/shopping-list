@@ -16,7 +16,7 @@ export class UserService {
       fullname: user.fullname,
       email: user.email,
       password: hash,
-      username: user.username,
+      username: user.username
     };
     const newUser = new this.userModel(reqBody);
     return newUser.save();
@@ -31,17 +31,17 @@ export class UserService {
       if (await bcrypt.compare(user.password, password)) {
         const payload = { username: user.username };
         return {
-          token: jwt.sign(payload),
+          token: jwt.sign(payload)
         };
       }
-      return new HttpException(
+      throw new HttpException(
         'Incorrect username or password',
-        HttpStatus.UNAUTHORIZED,
+        HttpStatus.UNAUTHORIZED
       );
     }
-    return new HttpException(
+    throw new HttpException(
       'Incorrect username or password',
-      HttpStatus.UNAUTHORIZED,
+      HttpStatus.UNAUTHORIZED
     );
   }
 
