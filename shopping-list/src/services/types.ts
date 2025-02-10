@@ -20,3 +20,12 @@ export interface SessionResponse {
     __v: 0;
   };
 }
+
+export interface ListResponse {
+  id: string;
+  name: string;
+  items: string[];
+  ownerIds: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}

@@ -22,7 +22,7 @@ export class UserService {
     return newUser.save();
   }
 
-  async signin(user: User, jwt: JwtService): Promise<any> {
+  async signin(user: User, jwt: JwtService): Promise<{ token: string }> {
     const foundUser = await this.userModel
       .findOne({ username: user.username })
       .exec();

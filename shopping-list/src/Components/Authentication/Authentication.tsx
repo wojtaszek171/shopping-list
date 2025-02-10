@@ -8,9 +8,9 @@ import "./Authentication.scss";
 const Authentication = () => {
   const { t } = useTranslation();
   const [register, setRegister] = useState(false);
-  const { isError, isLoading } = useCheckSessionQuery();
+  const { isLoading, isSuccess } = useCheckSessionQuery();
 
-  const shouldShowAuthentication = !isLoading && isError;
+  const shouldShowAuthentication = !isLoading && !isSuccess;
 
   return (
     <dialog open={shouldShowAuthentication}>
