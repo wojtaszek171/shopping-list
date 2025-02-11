@@ -6,8 +6,10 @@ import {
   Delete,
   Param,
   Body,
-  NotFoundException
+  NotFoundException,
+  Req
 } from '@nestjs/common';
+import { Request } from 'express';
 import { ListService } from '../service/list.service';
 import { List } from '../model/list.schema';
 import { CreateListDto } from '../dto/create-list.dto';
@@ -24,8 +26,12 @@ export class ListController {
   }
 
   @Post()
-  async createList(@Body() createListDto: CreateListDto): Promise<List> {
-    return this.listService.createList(createListDto);
+  async createList(
+    @Body() createListDto: CreateListDto,
+    @Req() req: Request
+  ): Promise<List> {
+    const userId = req.user.id; // Assuming user ID is stored in req.user
+    return this.listService.createList(createListDto, userId);
   }
 
   @Put(':id')

@@ -3,15 +3,25 @@ import { Document, Types } from 'mongoose';
 
 export type ListDocument = List & Document;
 
+export enum UserRole {
+  OWNER = 'owner',
+  COLLABORATOR = 'collaborator'
+}
+
 @Schema()
 export class List {
   @Prop({ required: true })
   name: string;
 
   @Prop({
-    type: [{ user: { type: Types.ObjectId, ref: 'User' }, role: String }]
+    type: [
+      {
+        user: { type: Types.ObjectId, ref: 'User' },
+        role: { type: String, enum: UserRole }
+      }
+    ]
   })
-  users: { user: Types.ObjectId; role: string }[];
+  users: { user: Types.ObjectId; role: UserRole }[];
 
   @Prop({ default: Date.now() })
   createdDate: Date;

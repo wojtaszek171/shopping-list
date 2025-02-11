@@ -9,9 +9,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="shopping-list-app">
+        <ListsView />
         <Authentication />
       </div>
-      <ListsView />
     </Provider>
   );
 };

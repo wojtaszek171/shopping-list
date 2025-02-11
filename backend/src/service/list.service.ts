@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { List, ListDocument } from '../model/list.schema';
+import { List, ListDocument, UserRole } from '../model/list.schema';
 import { Product, ProductDocument } from '../model/product.schema';
 import { CreateListDto } from '../dto/create-list.dto';
 import { UpdateListDto } from '../dto/update-list.dto';
@@ -18,8 +18,14 @@ export class ListService {
     return this.listModel.findById(listId).populate('users.user').exec();
   }
 
-  async createList(createListDto: CreateListDto): Promise<List> {
-    const createdList = new this.listModel(createListDto);
+  async createList(
+    createListDto: CreateListDto,
+    userId: string
+  ): Promise<List> {
+    const createdList = new this.listModel({
+      ...createListDto,
+      users: [{ user: userId, role: UserRole.OWNER }]
+    });
     return createdList.save();
   }
 

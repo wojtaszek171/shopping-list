@@ -1,4 +1,4 @@
-.shopping-list-app {
+html {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
 }
@@ -7,4 +7,17 @@ dialog {
   border: none;
   padding: 0;
   background: none;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.shopping-list-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

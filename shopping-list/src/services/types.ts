@@ -22,10 +22,11 @@ export interface SessionResponse {
 }
 
 export interface ListResponse {
-  id: string;
+  _id: string;
   name: string;
-  items: string[];
-  ownerIds: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdDate: Date;
+  users: User[];
+  __v: number;
+  totalProducts: number;
+  boughtProducts: number;
 }
