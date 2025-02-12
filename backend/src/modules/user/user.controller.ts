@@ -7,12 +7,12 @@ import {
   Get,
   Req
 } from '@nestjs/common';
-import { User } from '../model/user.schema';
-import { UserService } from '../service/user.service';
+import { User } from './user.schema';
+import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { SkipAuthGuard } from 'src/guards/skipauth.guard';
 import { Request } from 'express';
-import { UserDto } from 'src/dto/User.dto';
+import { UserDto } from 'src/modules/user/dto/User.dto';
 
 @Controller('/api/v1/user')
 export class UserController {
