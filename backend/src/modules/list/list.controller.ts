@@ -5,7 +5,8 @@ import {
   Param,
   Body,
   Patch,
-  Delete
+  Delete,
+  Req
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
@@ -13,30 +14,30 @@ import { UpdateListDto } from './dto/update-list.dto';
 
 @Controller('lists')
 export class ListController {
-  constructor(private readonly todoService: ListService) {}
+  constructor(private readonly listService: ListService) {}
 
   @Post()
-  create(@Body() createListDto: CreateListDto) {
-    return this.todoService.create(createListDto);
+  create(@Body() createListDto: CreateListDto, @Req() req) {
+    return this.listService.create(createListDto, req.user._id);
   }
 
   @Get()
   findAll() {
-    return this.todoService.findAll();
+    return this.listService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.todoService.findOne(id);
+    return this.listService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateListDto: UpdateListDto) {
-    return this.todoService.update(id, updateListDto);
+    return this.listService.update(id, updateListDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.todoService.delete(id);
+    return this.listService.delete(id);
   }
 }

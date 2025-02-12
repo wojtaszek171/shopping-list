@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { User } from '../user/user.schema';
 
 export type ListDocument = List & Document;
 
@@ -21,7 +22,7 @@ export class List {
       }
     ]
   })
-  users: { user: Types.ObjectId; role: UserRole }[];
+  users: { user: User; role: UserRole }[];
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

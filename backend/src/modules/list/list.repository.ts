@@ -14,11 +14,11 @@ export class ListRepository {
   }
 
   async findAll(): Promise<List[]> {
-    return this.listModel.find().exec();
+    return this.listModel.find().populate('users.user').exec();
   }
 
   async findOne(id: string): Promise<List | null> {
-    return this.listModel.findById(id).exec();
+    return this.listModel.findById(id).populate('users.user').exec();
   }
 
   async update(id: string, updateDto: UpdateListDto): Promise<List | null> {
