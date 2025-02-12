@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import ListItem from "./ListItem/ListItem";
 import AddIcon from "../../assets/icons/add.svg";
-import "./ListsView.scss";
 import Loader from "../Loader";
+import "./ListsView.scss";
 
 const ListsView: React.FC = () => {
   const { t } = useTranslation();

@@ -1,5 +1,9 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class CreateListDto {
-  readonly name: string;
-  readonly description?: string;
-  readonly owners: string[];
+  @IsNotEmpty()
+  title: string;
+
+  @IsNotEmpty()
+  description: string;
 }

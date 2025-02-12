@@ -8,14 +8,14 @@ import {
 } from "../../services/api/user.api";
 
 const SignIn = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { t } = useTranslation();
   const [signIn, { error, isSuccess }] = useSignInMutation();
   const [checkSession] = useLazyCheckSessionQuery();
 
   const handleSignIn = () => {
-    signIn({ username, password });
+    signIn({ email, password });
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -34,9 +34,9 @@ const SignIn = () => {
     <div className="sign-in-component">
       <h2>{t("signIn")}</h2>
       <Input
-        label={t("username")}
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        label={t("email")}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <Input
         label={t("password")}

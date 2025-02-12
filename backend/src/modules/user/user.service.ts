@@ -1,55 +1,33 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Document, Model } from 'mongoose';
-import { User, UserDocument } from './user.schema';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserRepository } from './user.repository';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
-  async signup(user: User): Promise<User> {
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(user.password, salt);
-    const reqBody = {
-      fullname: user.fullname,
-      email: user.email,
-      password: hash,
-      username: user.username
-    };
-    const newUser = new this.userModel(reqBody);
-    return newUser.save();
+  async create(userDto: CreateUserDto) {
+    return this.userRepository.create({
+      ...userDto
+    });
   }
 
-  async signin(user: User, jwt: JwtService): Promise<{ token: string }> {
-    const foundUser = await this.userModel
-      .findOne({ username: user.username })
-      .exec();
-    if (foundUser) {
-      const { password } = foundUser;
-      if (await bcrypt.compare(user.password, password)) {
-        const payload = { username: user.username };
-        return {
-          token: jwt.sign(payload)
-        };
-      }
-      throw new HttpException(
-        'Incorrect username or password',
-        HttpStatus.UNAUTHORIZED
-      );
-    }
-    throw new HttpException(
-      'Incorrect username or password',
-      HttpStatus.UNAUTHORIZED
-    );
+  async findByEmail(email: string) {
+    return this.userRepository.findByEmail(email);
   }
 
-  async getOne(username): Promise<User & Document> {
-    const user = await this.userModel.findOne({ username }).exec();
-    if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
+  async findById(id: string) {
+    const user = await this.userRepository.findById(id);
+    if (!user) throw new NotFoundException('User not found');
     return user;
+  }
+
+  async update(id: string, updateDto: UpdateUserDto) {
+    return this.userRepository.update(id, updateDto);
+  }
+
+  async delete(id: string) {
+    return this.userRepository.delete(id);
   }
 }

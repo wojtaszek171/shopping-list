@@ -11,7 +11,7 @@ export enum Unit {
   GRAM = 'gram'
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Product {
   @Prop({ required: true })
   name: string;
@@ -24,9 +24,6 @@ export class Product {
 
   @Prop({ type: Types.ObjectId, ref: 'List', required: true })
   list: Types.ObjectId;
-
-  @Prop({ default: Date.now() })
-  addedDate: Date;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

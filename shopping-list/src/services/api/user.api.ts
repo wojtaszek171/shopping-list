@@ -5,14 +5,14 @@ export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation<User, User>({
       query: (user) => ({
-        url: "user/signup",
+        url: "auth/register",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: user,
       }),
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+      async onQueryStarted(arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
         } catch (error) {
@@ -21,19 +21,16 @@ export const userApi = api.injectEndpoints({
         }
       },
     }),
-    signIn: builder.mutation<
-      TokenResponse,
-      Pick<User, "username" | "password">
-    >({
+    signIn: builder.mutation<TokenResponse, Pick<User, "email" | "password">>({
       query: (user) => ({
-        url: "user/signin",
+        url: "auth/login",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: user,
       }),
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+      async onQueryStarted(arg, { queryFulfilled }) {
         try {
           await queryFulfilled;
         } catch (error) {
@@ -44,12 +41,12 @@ export const userApi = api.injectEndpoints({
     }),
     signOut: builder.mutation<void, void>({
       query: () => ({
-        url: "user/signout",
+        url: "auth/signout",
         method: "POST",
       }),
     }),
     checkSession: builder.query<SessionResponse, void>({
-      query: () => "user/session",
+      query: () => "auth/profile",
     }),
   }),
 });

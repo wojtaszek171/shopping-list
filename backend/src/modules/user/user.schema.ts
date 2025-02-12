@@ -1,6 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-export type UserDocument = User & Document;
-@Schema()
+import { HydratedDocument } from 'mongoose';
+
+export type UserDocument = HydratedDocument<User>;
+
+@Schema({ timestamps: true })
 export class User {
   @Prop({ required: true })
   fullname: string;
@@ -10,7 +13,5 @@ export class User {
   email: string;
   @Prop({ required: true })
   password: string;
-  @Prop({ default: Date.now() })
-  createdDate: Date;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

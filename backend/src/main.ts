@@ -8,8 +8,9 @@ async function bootstrap() {
     origin: 'https://localhost:5173', // replace with your frontend domain
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
-    sameSite: 'none',
+    sameSite: 'none'
   });
+  app.setGlobalPrefix('api/v1');
   app.use(cookieParser());
 
   await app.listen(process.env.PORT ?? 3000);

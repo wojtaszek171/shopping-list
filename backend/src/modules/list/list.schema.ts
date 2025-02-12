@@ -8,7 +8,7 @@ export enum UserRole {
   COLLABORATOR = 'collaborator'
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class List {
   @Prop({ required: true })
   name: string;
@@ -22,9 +22,6 @@ export class List {
     ]
   })
   users: { user: Types.ObjectId; role: UserRole }[];
-
-  @Prop({ default: Date.now() })
-  createdDate: Date;
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);
