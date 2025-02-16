@@ -6,7 +6,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: 'https://localhost:5173', // replace with your frontend domain
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     sameSite: 'none'
   });
