@@ -30,3 +30,28 @@ export interface ListResponse {
   totalProducts: number;
   boughtProducts: number;
 }
+
+export interface Product {
+  _id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+  completed: boolean;
+  list: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateProductDto {
+  name: string;
+  quantity: number;
+  unit: string;
+  list: string;
+}
+
+export interface UpdateProductDto {
+  name?: string;
+  quantity?: number;
+  unit?: string;
+  completed?: boolean;
+}

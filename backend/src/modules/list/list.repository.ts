@@ -9,25 +9,28 @@ import { UpdateListDto } from './dto/update-list.dto';
 export class ListRepository {
   constructor(@InjectModel(List.name) private listModel: Model<ListDocument>) {}
 
-  async create(todo: CreateListDto): Promise<List> {
+  async create(todo: CreateListDto): Promise<ListDocument> {
     return new this.listModel(todo).save();
   }
 
-  async findAll(): Promise<List[]> {
+  async findAll(): Promise<ListDocument[]> {
     return this.listModel.find().populate('users.user').exec();
   }
 
-  async findOne(id: string): Promise<List | null> {
+  async findOne(id: string): Promise<ListDocument | null> {
     return this.listModel.findById(id).populate('users.user').exec();
   }
 
-  async update(id: string, updateDto: UpdateListDto): Promise<List | null> {
+  async update(
+    id: string,
+    updateDto: UpdateListDto
+  ): Promise<ListDocument | null> {
     return this.listModel
       .findByIdAndUpdate(id, updateDto, { new: true })
       .exec();
   }
 
-  async delete(id: string): Promise<List | null> {
+  async delete(id: string): Promise<ListDocument | null> {
     return this.listModel.findByIdAndDelete(id).exec();
   }
 }

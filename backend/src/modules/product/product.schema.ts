@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { List } from '../list/list.schema';
 
-export type ProductDocument = Product & Document;
+export type ProductDocument = HydratedDocument<Product>;
 
 export enum Unit {
   PIECE = 'piece',
@@ -22,7 +23,10 @@ export class Product {
   @Prop({ required: true, enum: Unit, default: Unit.PIECE })
   unit: Unit;
 
-  @Prop({ type: Types.ObjectId, ref: 'List', required: true })
+  @Prop({ default: false })
+  completed: boolean;
+
+  @Prop({ type: Types.ObjectId, ref: List.name, required: true })
   list: Types.ObjectId;
 }
 

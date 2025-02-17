@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useRemoveListMutation } from "../../../services/api/list.api";
 import Button from "../../Button";
 import DeleteIcon from "../../../assets/icons/delete.svg";
@@ -17,17 +18,30 @@ interface ListItemProps {
 }
 
 const ListItem = ({ list }: ListItemProps) => {
-  const [removeList] = useRemoveListMutation(); // Initialize the remove list mutation
+  const navigate = useNavigate();
+  const [removeList] = useRemoveListMutation();
 
   const handleRemove = () => {
-    removeList(list._id); // Call the onRemove function with the list id
+    removeList(list._id);
+  };
+
+  const handleClick = () => {
+    navigate(`/lists/${list._id}`);
   };
 
   return (
-    <div className="list-item">
+    <div className="list-item" onClick={handleClick}>
       <div className="list-header">
         <span className="list-name">{list.name}</span>
-        <Button onClick={handleRemove} size="icon" className="delete-button">
+        <Button
+          onClick={handleRemove}
+          size="icon"
+          className="delete-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleRemove();
+          }}
+        >
           <img src={DeleteIcon} alt="delete" />
         </Button>
       </div>
