@@ -12,7 +12,7 @@ export class ListService {
     private readonly productRepository: ProductRepository
   ) {}
 
-  async create(listDto: CreateListDto, userId: string) {
+  async create(listDto: CreateListDto, userId?: string) {
     const list = {
       ...listDto,
       users: [{ user: userId, role: UserRole.OWNER }]
@@ -37,6 +37,7 @@ export class ListService {
   }
 
   async findOne(id: string) {
+    if (!id) throw new NotFoundException('List ID is required');
     const list = await this.listRepository.findOne(id);
     if (!list) throw new NotFoundException('List not found');
     const products = await this.productRepository.findByListId(id);

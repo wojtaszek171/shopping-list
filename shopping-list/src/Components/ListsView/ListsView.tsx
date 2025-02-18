@@ -1,7 +1,7 @@
 import React from "react";
 import {
   useCreateListMutation,
-  useGetAllListsQuery, // Import the remove list mutation
+  useGetAllListsQuery,
 } from "../../services/api/list.api";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
@@ -34,7 +34,7 @@ const ListsView: React.FC = () => {
           size="icon"
           className="add-list-button"
         >
-          <img src={AddIcon} />
+          <AddIcon />
         </Button>
       </div>
     </div>

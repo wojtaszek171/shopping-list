@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import Authentication from "./Components/Authentication";
 import ListsView from "./Components/ListsView";
-import ListDetails from "./Components/ListDetails";
+import ListDetailsView from "./Components/ListDetailsView/ListDetailsView";
 import { useCheckSessionQuery } from "./services/api/user.api";
 import { useEffect } from "react";
 import { allTags, api } from "./services/api/api";
@@ -28,7 +28,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/lists" />} />
           <Route path="/lists" element={<ListsView />} />
-          <Route path="/lists/:id" element={<ListDetails />} />
+          <Route path="/lists/:id" element={<ListDetailsView />} />
         </Routes>
         <Authentication />
       </div>

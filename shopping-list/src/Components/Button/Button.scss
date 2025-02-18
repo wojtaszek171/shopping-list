@@ -11,10 +11,6 @@
   cursor: pointer;
   border-radius: 4px;
 
-  &:hover {
-    background-color: #45a049;
-  }
-
   &.big {
     padding: 20px 40px;
     font-size: 20px;
@@ -35,5 +31,23 @@
     align-items: center;
     padding: 0;
     font-size: 16px;
+  }
+
+  &.primary {
+    background-color: #4caf50;
+
+    &:hover {
+      background-color: #45a049;
+    }
+  }
+
+  &.secondary {
+    background-color: white;
+    color: #4caf50;
+    border: 1px solid #4caf50;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
   }
 }
