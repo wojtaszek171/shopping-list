@@ -35,7 +35,7 @@ const ListItem = ({ list }: ListItemProps) => {
   const { t } = useTranslation();
 
   const handleDelete = () => {
-    deleteList(list.name)
+    deleteList(list._id)
       .unwrap()
       .then(() => {
         closeDialog();
