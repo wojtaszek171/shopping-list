@@ -2,7 +2,7 @@ import { InputHTMLAttributes, useState } from "react";
 import "./Input.scss";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   className?: string;
 }
 
@@ -21,7 +21,7 @@ const Input = ({ label, type, ...props }: InputProps) => {
         type={type === "password" && showPassword ? "text" : type}
         placeholder=" "
       />
-      <label className="styled-input-label">{label}</label>
+      {label && <label className="styled-input-label">{label}</label>}
       {type === "password" && (
         <button
           type="button"

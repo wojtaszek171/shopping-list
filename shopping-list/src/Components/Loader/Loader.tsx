@@ -1,10 +1,16 @@
 import "./Loader.scss";
 
-const Loader = () => {
+interface LoaderProps {
+  color?: string;
+  className?: string;
+}
+
+const Loader: React.FC<LoaderProps> = ({ color = "#8cafe9", className }) => {
   return (
-    <div className="loader">
-      <img src="/src/assets/icons/loader.svg" alt="Loading..." />
-    </div>
+    <span
+      className={`loader ${className}`}
+      style={{ borderColor: `${color}`, borderBottomColor: "transparent" }}
+    />
   );
 };
 

@@ -9,6 +9,8 @@ export interface DialogProps {
   title?: string;
   primaryButtonText?: string;
   secondaryButtonText?: string;
+  error?: string;
+  loading?: boolean;
   onPrimaryButtonClick?: () => void;
   onSecondaryButtonClick?: () => void;
   closeButton?: boolean;
@@ -19,8 +21,6 @@ export interface DialogProps {
 export const DialogProvider = ({ children }: PropsWithChildren) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState<DialogProps | null>();
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const openDialog = (options: DialogProps) => {
     setOptions(options);
@@ -40,13 +40,7 @@ export const DialogProvider = ({ children }: PropsWithChildren) => {
   const showFooter = options?.primaryButtonText || options?.secondaryButtonText;
 
   const handlePrimaryButtonClick = () => {
-    try {
-      setIsLoading(true);
-      options?.onPrimaryButtonClick?.();
-    } catch (e) {
-      setError(e?.data?.message || e?.message);
-    }
-    setIsLoading(false);
+    options?.onPrimaryButtonClick?.();
   };
 
   return (
@@ -63,7 +57,7 @@ export const DialogProvider = ({ children }: PropsWithChildren) => {
             )}
           </div>
           <div className="dialog-content">{options?.content}</div>
-          {error}
+          <span className="dialog-error">{options?.error}</span>
           {showFooter && (
             <div className="dialog-footer">
               {options.secondaryButtonText && (
@@ -78,7 +72,7 @@ export const DialogProvider = ({ children }: PropsWithChildren) => {
               {options.primaryButtonText && (
                 <Button
                   size="normal"
-                  loading={isLoading}
+                  loading={options?.loading}
                   onClick={handlePrimaryButtonClick}
                 >
                   {options?.primaryButtonText}

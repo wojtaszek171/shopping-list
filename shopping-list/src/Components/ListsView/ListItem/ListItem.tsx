@@ -7,11 +7,12 @@ import Button from "../../Button";
 import MenuIcon from "../../../assets/icons/menu.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import { User } from "../../../services/types";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useContextMenu } from "../../ContextMenu/useContextMenu";
 import { useTranslation } from "react-i18next";
 import EditIcon from "../../../assets/icons/edit.svg";
 import { useDialog } from "../../Dialog/useDialog";
+import Input from "../../Input";
 import "./ListItem.scss";
 
 interface ListItemProps {
@@ -32,13 +33,50 @@ const ListItem = ({ list }: ListItemProps) => {
   const { openMenu } = useContextMenu();
   const [editList] = useEditListMutation();
   const { openDialog, closeDialog, updateDialog } = useDialog();
+  const [newName, setNewName] = useState(list.name);
   const { t } = useTranslation();
 
   const handleDelete = () => {
+    updateDialog({
+      loading: true,
+    });
     deleteList(list._id)
       .unwrap()
       .then(() => {
         closeDialog();
+      })
+      .catch((e) => {
+        updateDialog({
+          error: e?.data?.message,
+        });
+      })
+      .finally(() => {
+        updateDialog({
+          loading: false,
+        });
+      });
+  };
+
+  const handlRename = () => {
+    editList({
+      body: {
+        name: newName,
+      },
+      id: list._id,
+    })
+      .unwrap()
+      .then(() => {
+        closeDialog();
+      })
+      .catch((e) => {
+        updateDialog({
+          error: e?.data?.message,
+        });
+      })
+      .finally(() => {
+        updateDialog({
+          loading: false,
+        });
       });
   };
 
@@ -54,7 +92,23 @@ const ListItem = ({ list }: ListItemProps) => {
     });
   };
 
-  const handleRename: MouseEventHandler<HTMLElement> = () => {};
+  const renameAction: MouseEventHandler<HTMLElement> = () => {
+    openDialog({
+      closeButton: true,
+      title: t("rename"),
+      primaryButtonText: t("rename"),
+      onPrimaryButtonClick: handlRename,
+      secondaryButtonText: t("cancel"),
+      onSecondaryButtonClick: closeDialog,
+      content: (
+        <Input
+          type="text"
+          value={newName}
+          onChange={(e) => setNewName(e.target.value)}
+        />
+      ),
+    });
+  };
 
   const handleClick = () => {
     if (!list._id) {
@@ -72,7 +126,7 @@ const ListItem = ({ list }: ListItemProps) => {
         {
           text: t("rename"),
           icon: <EditIcon />,
-          action: handleRename,
+          action: renameAction,
         },
         {
           text: t("delete"),

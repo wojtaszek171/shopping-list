@@ -1,24 +1,20 @@
 .loader {
-  position: absolute;
+  max-width: 48px;
+  max-height: 48px;
+  min-width: 25px;
+  min-height: 25px;
+  border: 3px solid #8cafe9;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-
-  img {
-    -webkit-user-drag: none;
-    animation: spin 2s linear infinite;
-    max-height: 100px;
-    height: 100%;
-    width: 100%;
-  }
+  margin: auto;
 }
 
-@keyframes spin {
+@keyframes rotation {
   0% {
     transform: rotate(0deg);
   }

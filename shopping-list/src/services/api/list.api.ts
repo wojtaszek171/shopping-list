@@ -24,7 +24,7 @@ export const listApi = api.injectEndpoints({
     >({
       query: ({ id, body }) => ({
         url: `lists/${id}`,
-        method: "PUT",
+        method: "PATCH",
         body,
       }),
     }),
