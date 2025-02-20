@@ -26,6 +26,8 @@ const SignIn = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      setEmail("");
+      setPassword("");
       checkSession();
     }
   }, [checkSession, isSuccess]);

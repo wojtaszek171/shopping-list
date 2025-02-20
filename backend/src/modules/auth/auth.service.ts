@@ -48,4 +48,18 @@ export class AuthService {
       access_token: this.jwtService.sign(payload)
     });
   }
+
+  async logout(res: Response) {
+    res.cookie('jwt', '', {
+      path: '/', // Cookie is accessible from all paths
+      expires: new Date(0), // Cookie expires immediately
+      secure: true, // Cookie will only be sent over HTTPS in production
+      httpOnly: true, // Cookie cannot be accessed via client-side scripts
+      sameSite: 'none'
+    });
+
+    return res.send({
+      message: 'Logout successful'
+    });
+  }
 }

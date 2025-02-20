@@ -23,9 +23,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res() res: Response) {
-    // Clear the cookie on logout
-    res.clearCookie('jwt');
-    return res.send({ message: 'Logout successful' });
+    return this.authService.logout(res);
   }
 
   @Get('profile')

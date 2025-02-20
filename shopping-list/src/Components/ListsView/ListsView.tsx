@@ -13,10 +13,8 @@ import "./ListsView.scss";
 const ListsView: React.FC = () => {
   const { t } = useTranslation();
 
-  const { data: lists, error, isLoading } = useGetAllListsQuery();
+  const { data: lists, isLoading } = useGetAllListsQuery();
   const [createList] = useCreateListMutation();
-
-  if (error) return <div>Error loading lists</div>;
 
   const handleCreateList = () => {
     createList({ name: t("newList") });

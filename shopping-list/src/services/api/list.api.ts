@@ -57,6 +57,7 @@ export const listApi = api.injectEndpoints({
 
 export const {
   useGetListQuery,
+  useLazyGetListQuery,
   useGetAllListsQuery,
   useCreateListMutation,
   useEditListMutation,
