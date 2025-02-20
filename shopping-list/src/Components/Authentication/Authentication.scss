@@ -1,60 +1,4 @@
-.authentication-component {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
-  margin: 20px;
-
-  .authentication-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .authentication-switch {
-    font-size: 14px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  .sign-in-component,
-  .sign-up-component {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-
-    .submit-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #007bff;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #0056b3;
-      }
-    }
-
-    .error-message {
-      color: orange;
-      margin-top: 20px;
-    }
-  }
-}
-
-dialog[open] {
+.authentication-dialog[open] {
   position: fixed;
   top: 0;
   left: 0;
@@ -65,4 +9,60 @@ dialog[open] {
   justify-content: center;
   align-items: center;
   border: none;
+
+  .authentication-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    margin: 20px;
+
+    .authentication-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .authentication-switch {
+      font-size: 14px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      color: blue;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .sign-in-component,
+    .sign-up-component {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+
+      .submit-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+
+      .error-message {
+        color: orange;
+        margin-top: 20px;
+      }
+    }
+  }
 }

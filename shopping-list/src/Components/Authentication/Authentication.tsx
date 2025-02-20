@@ -13,7 +13,7 @@ const Authentication = () => {
   const shouldShowAuthentication = !isLoading && !isSuccess;
 
   return (
-    <dialog open={shouldShowAuthentication}>
+    <dialog className="authentication-dialog" open={shouldShowAuthentication}>
       <div className="authentication-component">
         <div className="authentication-container">
           {register ? <SignUp /> : <SignIn />}
