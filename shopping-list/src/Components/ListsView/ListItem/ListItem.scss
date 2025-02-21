@@ -1,7 +1,23 @@
 .list-item {
   display: flex;
+  min-height: 100px;
   overflow: hidden;
   position: relative;
+  border: 1px solid #ddd;
+  margin: 0 4px;
+  border-radius: 8px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #007bff;
+  }
 
   .list-header {
     padding: 10px;

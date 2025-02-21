@@ -1,27 +1,51 @@
 .lists-view-component {
+  position: relative;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 
   .lists-container {
+    overflow: auto;
+    row-gap: 10px;
     display: flex;
     flex-direction: column;
     flex: 1;
+
+    // Custom scrollbar styling
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: darkgrey;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .spacing {
+      min-height: 70px;
+    }
   }
 
-  .lists-footer {
-    .add-list-button {
-      float: right;
-      width: 50px;
-      height: 50px;
-      border-radius: 30%;
-      margin: 10px;
+  .add-list-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    float: right;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 10px;
 
-      svg {
-        width: 100%;
-        height: 100%;
-      }
+    svg {
+      width: 100%;
+      height: 100%;
     }
   }
 }

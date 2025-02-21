@@ -25,16 +25,15 @@ const ListsView: React.FC = () => {
       {isLoading && <Loader />}
       <div className="lists-container">
         {lists?.map((list) => <ListItem key={list._id} list={list} />)}
+        <div className="spacing" />
       </div>
-      <div className="lists-footer">
-        <Button
-          onClick={handleCreateList}
-          size="icon"
-          className="add-list-button"
-        >
-          <AddIcon />
-        </Button>
-      </div>
+      <Button
+        onClick={handleCreateList}
+        size="icon"
+        className="add-list-button"
+      >
+        <AddIcon />
+      </Button>
     </div>
   );
 };

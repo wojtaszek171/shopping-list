@@ -7,7 +7,7 @@ import Button from "../../Button";
 import MenuIcon from "../../../assets/icons/menu.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import { User } from "../../../services/types";
-import { MouseEventHandler, useState } from "react";
+import { MouseEvent, MouseEventHandler, useState } from "react";
 import { useContextMenu } from "../../ContextMenu/useContextMenu";
 import { useTranslation } from "react-i18next";
 import EditIcon from "../../../assets/icons/edit.svg";
@@ -118,8 +118,12 @@ const ListItem = ({ list }: ListItemProps) => {
     navigate(`/lists/${list._id}`);
   };
 
-  const handleMenuOpen: MouseEventHandler<HTMLElement> = (e) => {
+  const handleMenuOpen = (
+    e: MouseEvent<HTMLElement>,
+    position?: { x: number; y: number },
+  ) => {
     e.stopPropagation();
+    const menuPosition = position || { x: e.clientX, y: e.clientY };
     openMenu(
       list.name,
       [
@@ -134,29 +138,36 @@ const ListItem = ({ list }: ListItemProps) => {
           action: deleteAction,
         },
       ],
-      { x: e.clientX, y: e.clientY },
+      menuPosition,
     );
   };
 
-  const handleContextMenu: MouseEventHandler<HTMLDivElement> = (e) => {
+  const handleContextMenu: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     handleMenuOpen(e);
   };
 
   return (
-    <div
+    <button
       className="list-item"
       onClick={handleClick}
       onContextMenu={handleContextMenu}
     >
       <div className="list-header">
         <span className="list-name">{list.name}</span>
-        <Button onClick={handleMenuOpen} size="icon" className="menu-button">
+        <Button
+          onClick={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            handleMenuOpen(e, { x: rect.left, y: rect.bottom });
+          }}
+          size="icon"
+          className="menu-button"
+        >
           <MenuIcon />
         </Button>
       </div>
       <div className="list-content"></div>
-    </div>
+    </button>
   );
 };
 
