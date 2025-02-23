@@ -1,4 +1,27 @@
 .dropdown-component {
+  display: flex;
+  flex-direction: column;
+  min-width: 100px;
+  overflow: hidden;
+
+  .dropdown-title {
+    color: inherit;
+    background: none;
+    float: left;
+    border: none;
+    padding: 10px;
+    max-width: 100%;
+    color: #474747;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .dropdown-option {
     background: none;
     border: none;
@@ -9,6 +32,10 @@
 
     &:hover {
       background-color: #f0f0f0;
+      color: #333;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
     }
   }
 }

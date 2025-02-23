@@ -62,4 +62,12 @@ export class AuthService {
       message: 'Logout successful'
     });
   }
+
+  async getUser(res: Response, userId: string) {
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return res.send(user);
+  }
 }

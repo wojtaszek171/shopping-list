@@ -11,14 +11,11 @@ export interface TokenResponse {
 }
 
 export interface SessionResponse {
-  message: string;
-  user: {
-    _id: string;
-    fullname: string;
-    username: string;
-    email: string;
-    __v: 0;
-  };
+  _id: string;
+  fullname: string;
+  username: string;
+  email: string;
+  __v: 0;
 }
 
 export interface ListResponse {

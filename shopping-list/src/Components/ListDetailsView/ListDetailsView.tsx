@@ -5,19 +5,19 @@ import { useGetListQuery } from "../../services/api/list.api";
 import { useEffect } from "react";
 import AddIcon from "../../assets/icons/add.svg";
 import Button from "../Button";
+import { useHeader } from "../AppHeader/HeaderProvider";
 import "./ListDetailsView.scss";
 
-interface ListDetailsViewProps {
-  setTitle: (title?: string) => void;
-}
-
-const ListDetailsView = ({ setTitle }: ListDetailsViewProps) => {
+const ListDetailsView = () => {
   const { id } = useParams();
   const { data: listData } = useGetListQuery(id ?? skipToken);
   const { data: productsData } = useGetProductsByListIdQuery(id ?? skipToken);
+  const { setTitle, setButtons } = useHeader();
 
   useEffect(() => {
-    setTitle(listData?.name);
+    if (listData?.name) {
+      setTitle(listData?.name);
+    }
 
     return () => {
       setTitle("");

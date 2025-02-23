@@ -7,7 +7,12 @@ import Button from "../../Button";
 import MenuIcon from "../../../assets/icons/menu.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
 import { User } from "../../../services/types";
-import { MouseEvent, MouseEventHandler, useState } from "react";
+import {
+  MouseEvent,
+  MouseEventHandler,
+  useRef,
+  KeyboardEventHandler,
+} from "react";
 import { useContextMenu } from "../../ContextMenu/useContextMenu";
 import { useTranslation } from "react-i18next";
 import EditIcon from "../../../assets/icons/edit.svg";
@@ -25,16 +30,29 @@ interface ListItemProps {
     totalProducts: number;
     boughtProducts: number;
   };
+  isSelected: boolean;
+  isSelecting: boolean;
+  onSelect: () => void;
+  onLongPress: () => void;
+  isTouchDevice: boolean;
 }
 
-const ListItem = ({ list }: ListItemProps) => {
+const ListItem = ({
+  list,
+  isSelected,
+  isSelecting,
+  onSelect,
+  onLongPress,
+  isTouchDevice,
+}: ListItemProps) => {
   const navigate = useNavigate();
   const [deleteList] = useRemoveListMutation();
   const { openMenu } = useContextMenu();
   const [editList] = useEditListMutation();
   const { openDialog, closeDialog, updateDialog } = useDialog();
-  const [newName, setNewName] = useState(list.name);
+  const newName = useRef(list.name);
   const { t } = useTranslation();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleDelete = () => {
     updateDialog({
@@ -60,7 +78,7 @@ const ListItem = ({ list }: ListItemProps) => {
   const handlRename = () => {
     editList({
       body: {
-        name: newName,
+        name: newName.current,
       },
       id: list._id,
     })
@@ -103,8 +121,10 @@ const ListItem = ({ list }: ListItemProps) => {
       content: (
         <Input
           type="text"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
+          defaultValue={newName.current}
+          onChange={(e) => {
+            newName.current = e.target.value;
+          }}
         />
       ),
     });
@@ -142,17 +162,62 @@ const ListItem = ({ list }: ListItemProps) => {
     );
   };
 
-  const handleContextMenu: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleContextMenu: MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
+    if (isTouchDevice || isSelecting) {
+      return;
+    }
     handleMenuOpen(e);
   };
 
+  const handleMouseDown = () => {
+    if (isTouchDevice) {
+      timerRef.current = setTimeout(onLongPress, 500);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const handleKeyDown: KeyboardEventHandler = (e) => {
+    if (!(e.key === "Enter" || e.key === " ")) {
+      return;
+    }
+    if (isSelecting) {
+      onSelect();
+    } else {
+      handleClick();
+    }
+  };
+
   return (
-    <button
-      className="list-item"
-      onClick={handleClick}
+    <div
+      role="button"
+      tabIndex={0}
+      className={`list-item ${isSelected ? "selected" : ""}`}
+      onClick={isSelecting ? onSelect : handleClick}
+      onKeyDown={handleKeyDown}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onTouchStart={handleMouseDown}
+      onTouchEnd={handleMouseUp}
       onContextMenu={handleContextMenu}
     >
+      {isSelecting && !isTouchDevice && (
+        <Input
+          type="checkbox"
+          checked={isSelected}
+          onChange={onSelect}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          className="select-checkbox"
+        />
+      )}
       <div className="list-header">
         <span className="list-name">{list.name}</span>
         <Button
@@ -167,7 +232,7 @@ const ListItem = ({ list }: ListItemProps) => {
         </Button>
       </div>
       <div className="list-content"></div>
-    </button>
+    </div>
   );
 };
 

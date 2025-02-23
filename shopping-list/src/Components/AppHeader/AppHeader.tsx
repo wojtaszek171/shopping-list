@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import GoBackIcon from "../../assets/icons/goback.svg";
 import ProfileIcon from "../../assets/icons/profile.svg";
@@ -8,19 +8,21 @@ import {
   useCheckSessionQuery,
   useSignOutMutation,
 } from "../../services/api/user.api";
+import { HeaderContext } from "./HeaderProvider";
 import "./AppHeader.scss";
 
-interface AppHeaderProps {
-  title?: string;
-}
-
-const AppHeader = ({ title }: AppHeaderProps) => {
+const AppHeader = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { title, buttons } = useContext(HeaderContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const { t } = useTranslation();
   const [signOut] = useSignOutMutation();
-  const { isSuccess, refetch: checkSession } = useCheckSessionQuery();
+  const {
+    data: sessionData,
+    isSuccess,
+    refetch: checkSession,
+  } = useCheckSessionQuery();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,6 +57,10 @@ const AppHeader = ({ title }: AppHeaderProps) => {
     });
   };
 
+  const isActive = (active: boolean | (() => boolean) | undefined) => {
+    return typeof active === "function" ? active() : active;
+  };
+
   return (
     <header className="app-header">
       {location.pathname !== "/lists" && (
@@ -63,6 +69,18 @@ const AppHeader = ({ title }: AppHeaderProps) => {
         </button>
       )}
       <span className="center-content">{title}</span>
+      {buttons
+        .filter((b) => !b.hidden)
+        .map((button, index) => (
+          <button
+            key={index}
+            className={`header-button ${isActive(button.active) ? "active" : ""}`}
+            onClick={button.action}
+          >
+            {button.icon}
+            {button.title}
+          </button>
+        ))}
       {isSuccess && (
         <div className="profile-button" ref={dropdownRef}>
           <button onClick={handleProfileClick}>
@@ -70,6 +88,7 @@ const AppHeader = ({ title }: AppHeaderProps) => {
           </button>
           {showDropdown && (
             <Dropdown
+              title={sessionData?.fullname}
               options={[{ label: t("logout"), onClick: handleLogout }]}
             />
           )}

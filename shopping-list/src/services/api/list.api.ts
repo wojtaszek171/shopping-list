@@ -27,6 +27,7 @@ export const listApi = api.injectEndpoints({
         method: "PATCH",
         body,
       }),
+      invalidatesTags: ["List"],
     }),
     addOwner: builder.mutation<ListResponse, { id: string; ownerId: string }>({
       query: ({ id, ownerId }) => ({

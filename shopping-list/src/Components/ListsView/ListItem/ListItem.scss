@@ -19,6 +19,18 @@
     box-shadow: 0 0 0 2px #007bff;
   }
 
+  &.selected {
+    background-color: #e0f7fa;
+    border-color: #007bff;
+  }
+
+  .select-checkbox {
+    position: absolute;
+    cursor: pointer;
+    left: 5px;
+    z-index: 1;
+  }
+
   .list-header {
     padding: 10px;
     width: 100%;

@@ -27,7 +27,9 @@ export class AuthController {
   }
 
   @Get('profile')
-  getProfile(@Req() req) {
-    return req.user;
+  getProfile(@Req() req, @Res() res) {
+    const { userId } = req.user;
+
+    return this.authService.getUser(res, userId);
   }
 }
