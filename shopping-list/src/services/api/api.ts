@@ -3,7 +3,7 @@ import socket from "./socket";
 
 const API_HOST = import.meta.env.VITE_API_HOST;
 
-export const allTags = ["List"];
+export const allTags = ["List", "Products"];
 
 export const api = createApi({
   reducerPath: "api",

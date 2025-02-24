@@ -1,0 +1,45 @@
+.products-browser {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+
+  .products-browser-dialog {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    max-height: 80%;
+    overflow-y: auto;
+
+    .products-browser-header {
+      float: right;
+    }
+
+    input {
+      width: auto;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 8px;
+        cursor: pointer;
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+    }
+  }
+}

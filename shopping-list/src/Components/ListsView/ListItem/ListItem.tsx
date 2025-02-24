@@ -125,6 +125,7 @@ const ListItem = ({
           onChange={(e) => {
             newName.current = e.target.value;
           }}
+          autoFocus
         />
       ),
     });

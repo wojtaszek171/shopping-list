@@ -12,9 +12,11 @@ export const productApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Products"],
     }),
     getProductsByListId: builder.query<Product[], string>({
       query: (listId) => `/lists/${listId}/products`,
+      providesTags: ["Products"],
     }),
     updateProduct: builder.mutation<
       void,
@@ -32,6 +34,9 @@ export const productApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    getSuggestedProducts: builder.query<Product[], string>({
+      query: (query) => `/products/suggestions?query=${query}`,
+    }),
   }),
 });
 
@@ -40,4 +45,5 @@ export const {
   useGetProductsByListIdQuery,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useGetSuggestedProductsQuery,
 } = productApi;

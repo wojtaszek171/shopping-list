@@ -17,10 +17,10 @@ export class Product {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop()
   quantity: number;
 
-  @Prop({ required: true, enum: Unit, default: Unit.PIECE })
+  @Prop({ enum: Unit, default: Unit.PIECE })
   unit: Unit;
 
   @Prop({ default: false })

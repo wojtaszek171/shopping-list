@@ -2,10 +2,11 @@ import { useParams } from "react-router-dom";
 import { useGetProductsByListIdQuery } from "../../services/api/product.api";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetListQuery } from "../../services/api/list.api";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AddIcon from "../../assets/icons/add.svg";
 import Button from "../Button";
 import { useHeader } from "../AppHeader/HeaderProvider";
+import ProductsBrowser from "../ProductsBrowser/ProductsBrowser";
 import "./ListDetailsView.scss";
 
 const ListDetailsView = () => {
@@ -13,6 +14,7 @@ const ListDetailsView = () => {
   const { data: listData } = useGetListQuery(id ?? skipToken);
   const { data: productsData } = useGetProductsByListIdQuery(id ?? skipToken);
   const { setTitle, setButtons } = useHeader();
+  const [isProductsBrowserOpen, setProductsBrowserOpen] = useState(false);
 
   useEffect(() => {
     if (listData?.name) {
@@ -24,7 +26,17 @@ const ListDetailsView = () => {
     };
   }, [listData?.name, setTitle]);
 
-  const handleCreateProduct = () => {};
+  const handleCreateProduct = () => {
+    setProductsBrowserOpen(true);
+  };
+
+  const handleCloseProductsBrowser = () => {
+    setProductsBrowserOpen(false);
+  };
+
+  if (!id) {
+    return;
+  }
 
   return (
     <div className="list-details-component">
@@ -36,6 +48,9 @@ const ListDetailsView = () => {
       >
         <AddIcon />
       </Button>
+      {isProductsBrowserOpen && (
+        <ProductsBrowser listId={id} onClose={handleCloseProductsBrowser} />
+      )}
     </div>
   );
 };
