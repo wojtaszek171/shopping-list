@@ -6,6 +6,7 @@ interface HeaderButton {
   icon?: ReactElement;
   hidden?: boolean;
   active?: boolean | (() => boolean);
+  color?: string;
 }
 
 interface HeaderContextProps {

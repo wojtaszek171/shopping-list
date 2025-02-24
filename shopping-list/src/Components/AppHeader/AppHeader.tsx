@@ -76,8 +76,12 @@ const AppHeader = () => {
             key={index}
             className={`header-button ${isActive(button.active) ? "active" : ""}`}
             onClick={button.action}
+            style={{ fill: button?.color }}
           >
-            {button.icon}
+            {button.icon &&
+              React.cloneElement(button.icon, {
+                style: { fill: button?.color },
+              })}
             {button.title}
           </button>
         ))}
