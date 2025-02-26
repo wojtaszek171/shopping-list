@@ -8,6 +8,7 @@ import Button from "../Button";
 import { useHeader } from "../AppHeader/HeaderProvider";
 import ProductsBrowser from "../ProductsBrowser/ProductsBrowser";
 import "./ListDetailsView.scss";
+import ProductItem from "./ProductItem/ProductItem";
 
 const ListDetailsView = () => {
   const { id } = useParams();
@@ -40,7 +41,7 @@ const ListDetailsView = () => {
 
   return (
     <div className="list-details-component">
-      {JSON.stringify(productsData)}
+      {productsData?.map((product) => <ProductItem {...product} />)}
       <Button
         onClick={handleCreateProduct}
         size="icon"

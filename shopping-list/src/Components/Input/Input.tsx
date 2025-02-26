@@ -6,7 +6,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
 }
 
-const Input = ({ label, type, ...props }: InputProps) => {
+const Input = ({ label, type, className, ...props }: InputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -14,10 +14,10 @@ const Input = ({ label, type, ...props }: InputProps) => {
   };
 
   return (
-    <div className={`input-container ${props.className}`}>
+    <div className={`input-container ${className}`}>
       <input
-        className="styled-input"
         {...props}
+        className="styled-input"
         type={type === "password" && showPassword ? "text" : type}
         placeholder=" "
       />
