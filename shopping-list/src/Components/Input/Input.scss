@@ -12,6 +12,10 @@
     border-color 0.3s,
     box-shadow 0.3s;
 
+  &:not([type="checkbox"]) {
+    padding: 15px 32px;
+  }
+
   &[type="checkbox"] {
     appearance: none;
     width: 20px;

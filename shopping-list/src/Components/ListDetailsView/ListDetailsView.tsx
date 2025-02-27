@@ -41,7 +41,7 @@ const ListDetailsView = () => {
 
   return (
     <div className="list-details-component">
-      {productsData?.map((product) => <ProductItem {...product} />)}
+      {productsData?.map((product) => <ProductItem listId={id} {...product} />)}
       <Button
         onClick={handleCreateProduct}
         size="icon"
