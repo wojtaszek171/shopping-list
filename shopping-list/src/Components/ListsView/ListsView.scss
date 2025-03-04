@@ -1,6 +1,5 @@
 .lists-view-component {
   position: relative;
-  margin-top: 10px;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -8,25 +7,12 @@
   overflow: hidden;
 
   .lists-container {
+    padding-top: 10px;
     overflow: auto;
     row-gap: 10px;
     display: flex;
     flex-direction: column;
     flex: 1;
-
-    // Custom scrollbar styling
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: darkgrey;
-      border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
 
     .spacing {
       min-height: 70px;

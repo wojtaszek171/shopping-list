@@ -43,19 +43,23 @@ export const DialogProvider = ({ children }: PropsWithChildren) => {
     options?.onPrimaryButtonClick?.();
   };
 
+  const showHeader = options?.title || options?.closeButton;
+
   return (
     <DialogContext.Provider value={{ openDialog, closeDialog, updateDialog }}>
       {children}
       {isOpen && (
         <dialog className="dialog" open={isOpen}>
-          <div className="dialog-header">
-            <span className="dialog-title">{options?.title}</span>
-            {options?.closeButton && (
-              <Button size="icon" onClick={closeDialog}>
-                <CloseIcon />
-              </Button>
-            )}
-          </div>
+          {showHeader && (
+            <div className="dialog-header">
+              <span className="dialog-title">{options?.title}</span>
+              {options?.closeButton && (
+                <Button size="icon" onClick={closeDialog}>
+                  <CloseIcon />
+                </Button>
+              )}
+            </div>
+          )}
           <div className="dialog-content">{options?.content}</div>
           <span className="dialog-error">{options?.error}</span>
           {showFooter && (

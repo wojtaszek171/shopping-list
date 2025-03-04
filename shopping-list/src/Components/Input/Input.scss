@@ -20,7 +20,7 @@
     appearance: none;
     width: 20px;
     height: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #2d2c2c;
     border-radius: 4px;
     cursor: pointer;
     position: relative;
@@ -41,6 +41,12 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+    }
+
+    &:disabled {
+      background-color: #e9ecef;
+      border-color: #ced4da;
+      cursor: not-allowed;
     }
   }
 }

@@ -1,0 +1,25 @@
+.product-details-modal {
+  .close-button {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    margin-right: 5px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+  }
+
+  label {
+    margin-bottom: 10px;
+
+    input {
+      margin-left: 10px;
+    }
+  }
+
+  button {
+    margin-top: 10px;
+  }
+}

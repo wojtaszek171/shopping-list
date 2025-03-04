@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { KeyboardEventHandler, useState } from "react";
 import { useCreateProductMutation } from "../../services/api/product.api";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import CloseIcon from "../../assets/icons/close.svg";
 import "./ProductsBrowser.scss";
+
+type ProductOption = {
+  name: string;
+};
 
 interface ProductsBrowserProps {
   listId: string;
@@ -17,9 +21,15 @@ const ProductsBrowser = ({ listId, onClose }: ProductsBrowserProps) => {
   const [createProduct] = useCreateProductMutation();
   const { t } = useTranslation();
 
-  const handleSelectProduct = async (product) => {
+  const handleSelectProduct = async (product: ProductOption) => {
     await createProduct({ listId, data: { name: product.name } });
     onClose();
+  };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === "Enter") {
+      handleSelectProduct({ name: query });
+    }
   };
 
   return (
@@ -34,6 +44,7 @@ const ProductsBrowser = ({ listId, onClose }: ProductsBrowserProps) => {
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={t("product")}
         />
         <ul>

@@ -19,7 +19,6 @@ const Input = ({ label, type, className, ...props }: InputProps) => {
         {...props}
         className="styled-input"
         type={type === "password" && showPassword ? "text" : type}
-        placeholder=" "
       />
       {label && <label className="styled-input-label">{label}</label>}
       {type === "password" && (

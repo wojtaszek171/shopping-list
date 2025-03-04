@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   useCreateListMutation,
   useGetAllListsQuery,
@@ -13,6 +13,7 @@ import Loader from "../Loader";
 import { useHeader } from "../AppHeader/HeaderProvider";
 import DeleteIcon from "../../assets/icons/delete.svg";
 import { useDialog } from "../Dialog/useDialog";
+import useIsTouch from "../../hooks/useIsTouch";
 import "./ListsView.scss";
 
 const ListsView: React.FC = () => {
@@ -22,7 +23,7 @@ const ListsView: React.FC = () => {
   const [deleteList] = useRemoveListMutation();
 
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const isTouchDevice = useIsTouch();
   const [isSelecting, setIsSelecting] = useState(false);
   const { setTitle, setButtons } = useHeader();
   const { openDialog, closeDialog, updateDialog } = useDialog();
@@ -44,7 +45,7 @@ const ListsView: React.FC = () => {
     setIsSelecting(true);
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = useCallback(() => {
     const deletePromises = selectedLists.map((listId) =>
       deleteList(listId).unwrap(),
     );
@@ -71,7 +72,7 @@ const ListsView: React.FC = () => {
       }
     });
     setSelectedLists([]);
-  };
+  }, [closeDialog, deleteList, selectedLists, t, updateDialog]);
 
   useEffect(() => {
     if (!selectedLists.length) {
@@ -81,10 +82,6 @@ const ListsView: React.FC = () => {
 
   useEffect(() => {
     setTitle(t("yourLists"));
-
-    const handleTouchStart = () => setIsTouchDevice(true);
-    window.addEventListener("touchstart", handleTouchStart);
-    return () => window.removeEventListener("touchstart", handleTouchStart);
   }, [setTitle, t]);
 
   useEffect(() => {
@@ -122,14 +119,21 @@ const ListsView: React.FC = () => {
         },
         icon: <MultiSelectIcon />,
         active: isSelecting,
-        hidden: isTouchDevice,
+        hidden: isTouchDevice || !lists?.length,
       },
     ]);
+
+    return () => {
+      setButtons([]);
+    };
   }, [
     closeDialog,
+    handleBulkDelete,
     isSelecting,
     isTouchDevice,
+    lists,
     openDialog,
+    selectedLists,
     selectedLists.length,
     setButtons,
     t,

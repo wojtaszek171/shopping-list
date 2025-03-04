@@ -2,6 +2,20 @@ html {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   color: #474747;
+
+  // Custom scrollbar styling
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 dialog {

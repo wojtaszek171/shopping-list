@@ -32,6 +32,7 @@ export interface Product {
   _id: string;
   name: string;
   quantity: number;
+  category: string;
   unit: string;
   completed: boolean;
   list: string;
@@ -41,14 +42,14 @@ export interface Product {
 
 export interface CreateProductDto {
   name: string;
-  quantity: number;
-  unit: string;
-  list: string;
+  quantity?: number;
+  unit?: string;
 }
 
 export interface UpdateProductDto {
   name?: string;
   quantity?: number;
+  category?: string;
   unit?: string;
   completed?: boolean;
 }
