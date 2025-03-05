@@ -26,4 +26,10 @@ export enum CategoriesEnum {
   other = "other",
 }
 
-export const units = ["piece", "kilogram", "liter", "milliliter", "gram"];
+export enum UnitsEnum {
+  piece = "pcs",
+  kilogram = "kg",
+  liter = "l",
+  milliliter = "ml",
+  gram = "g",
+}

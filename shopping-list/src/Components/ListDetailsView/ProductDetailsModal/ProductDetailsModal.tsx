@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import Button from "../../Button";
 import GoBackIcon from "../../../assets/icons/goback.svg";
 import Select from "../../Select";
-import { CategoriesEnum, units } from "../../../utils/consts";
+import { CategoriesEnum, units, UnitsEnum } from "../../../utils/consts";
 
 import "./ProductDetailsModal.scss";
 import useCategoriesIcons from "./useCategoriesIcons";
@@ -68,6 +68,11 @@ const ProductDetailsModal = ({
     }),
   );
 
+  const unitsOptions = Object.entries(UnitsEnum).map(([key, value]) => ({
+    key,
+    value,
+  }));
+
   return (
     <div className="product-details-modal">
       <div className="row">
@@ -80,26 +85,29 @@ const ProductDetailsModal = ({
           value={formData.name}
           onChange={handleChange}
         />
+        <Select
+          className="category-select"
+          name="category"
+          value={formData.category}
+          options={categoryOptions}
+          onChange={console.log}
+        />
       </div>
-      <Input
-        type="number"
-        name="quantity"
-        placeholder={t("quantity")}
-        value={formData.quantity}
-        onChange={handleChange}
-      />
-      <Select
-        name="category"
-        value={formData.category}
-        options={categoryOptions}
-        onChange={console.log}
-      />
-      {/* <Select
-        name="unit"
-        value={formData.unit}
-        options={units}
-        onChange={handleChange}
-      /> */}
+      <div className="row">
+        <Input
+          type="number"
+          name="quantity"
+          placeholder={t("quantity")}
+          value={formData.quantity}
+          onChange={handleChange}
+        />
+        <Select
+          name="unit"
+          value={formData.unit}
+          options={unitsOptions}
+          onChange={handleChange}
+        />
+      </div>
     </div>
   );
 };
