@@ -6,8 +6,10 @@ import { useTranslation } from "react-i18next";
 import Button from "../../Button";
 import GoBackIcon from "../../../assets/icons/goback.svg";
 import Select from "../../Select";
-import { predefinedCategories, units } from "../../../utils/consts";
+import { CategoriesEnum, units } from "../../../utils/consts";
+
 import "./ProductDetailsModal.scss";
+import useCategoriesIcons from "./useCategoriesIcons";
 
 interface ProductDetailsModalProps {
   product: Product;
@@ -25,6 +27,7 @@ const ProductDetailsModal = ({
     category: product.category,
     unit: product.unit,
   });
+  const { getCategoryIcon } = useCategoriesIcons();
 
   const [updateProductDetails] = useUpdateProductMutation();
   const [isChanged, setIsChanged] = useState(false);
@@ -58,8 +61,11 @@ const ProductDetailsModal = ({
     onClose();
   };
 
-  const categoryOptions = Object.entries(predefinedCategories).map(
-    ([_key, value]) => value,
+  const categoryOptions = Object.entries(CategoriesEnum).map(
+    ([key, value]) => ({
+      key: key,
+      value: getCategoryIcon(value),
+    }),
   );
 
   return (
@@ -86,14 +92,14 @@ const ProductDetailsModal = ({
         name="category"
         value={formData.category}
         options={categoryOptions}
-        onChange={handleChange}
+        onChange={console.log}
       />
-      <Select
+      {/* <Select
         name="unit"
         value={formData.unit}
         options={units}
         onChange={handleChange}
-      />
+      /> */}
     </div>
   );
 };
