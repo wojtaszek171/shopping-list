@@ -27,9 +27,9 @@ export enum CategoriesEnum {
 }
 
 export enum UnitsEnum {
-  piece = "pcs",
-  kilogram = "kg",
-  liter = "l",
-  milliliter = "ml",
-  gram = "g",
+  pcs = "piece",
+  kg = "kilogram",
+  l = "liter",
+  ml = "milliliter",
+  g = "gram ",
 }

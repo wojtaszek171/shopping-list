@@ -24,8 +24,8 @@ export interface ListResponse {
   createdDate: Date;
   users: User[];
   __v: number;
-  totalProducts: number;
-  boughtProducts: number;
+  allProductsCount: number;
+  completedProductsCount: number;
 }
 
 export interface Product {

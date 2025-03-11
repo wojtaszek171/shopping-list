@@ -28,6 +28,9 @@ export class Product {
 
   @Prop({ type: Types.ObjectId, ref: List.name, required: true })
   list: Types.ObjectId;
+
+  @Prop({ required: true })
+  category: string;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

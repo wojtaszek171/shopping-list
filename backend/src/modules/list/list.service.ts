@@ -25,7 +25,7 @@ export class ListService {
     return Promise.all(
       lists.map(async (list) => {
         const products = await this.productRepository.findByListId(
-          list._id as string
+          list.id as string
         );
         return {
           ...list.toObject(),

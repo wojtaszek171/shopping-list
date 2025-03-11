@@ -6,7 +6,7 @@ import {
 import Button from "../../Button";
 import MenuIcon from "../../../assets/icons/menu.svg";
 import DeleteIcon from "../../../assets/icons/delete.svg";
-import { User } from "../../../services/types";
+import { ListResponse } from "../../../services/types";
 import {
   MouseEvent,
   MouseEventHandler,
@@ -19,17 +19,10 @@ import EditIcon from "../../../assets/icons/edit.svg";
 import { useDialog } from "../../Dialog/useDialog";
 import Input from "../../Input";
 import "./ListItem.scss";
+import ProgressBar from "../../ProgressBar/ProgressBar";
 
 interface ListItemProps {
-  list: {
-    _id: string;
-    name: string;
-    createdDate: Date;
-    users: User[];
-    __v: number;
-    totalProducts: number;
-    boughtProducts: number;
-  };
+  list: ListResponse;
   isSelected: boolean;
   isSelecting: boolean;
   onSelect: () => void;
@@ -195,6 +188,10 @@ const ListItem = ({
     }
   };
 
+  const completedPercentage = list.allProductsCount
+    ? (list.completedProductsCount / list.allProductsCount) * 100
+    : 0;
+
   return (
     <div
       role="button"
@@ -232,7 +229,12 @@ const ListItem = ({
           <MenuIcon />
         </Button>
       </div>
-      <div className="list-content"></div>
+      <div className="list-content">
+        <ProgressBar percentage={completedPercentage} />
+        <span className="products-count">
+          {list.completedProductsCount}/{list.allProductsCount}
+        </span>
+      </div>
     </div>
   );
 };

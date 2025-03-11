@@ -2,26 +2,34 @@ import { useState, useRef, useEffect } from "react";
 import { SelectHTMLAttributes, ReactNode } from "react";
 import "./Select.scss";
 
-interface SelectProps extends SelectHTMLAttributes<HTMLDivElement> {
+interface SelectProps
+  extends Omit<SelectHTMLAttributes<HTMLDivElement>, "onChange"> {
   label?: string;
   className?: string;
   options: {
     key: string;
     value: string | ReactNode;
   }[];
+  onChange?: (key: string) => void;
 }
 
-const Select = ({ label, className, options, ...props }: SelectProps) => {
-  const [selectedOption, setSelectedOption] = useState<string | ReactNode>(
-    options[0].value,
-  );
+const Select = ({
+  label,
+  className,
+  options,
+  value,
+  onChange,
+  ...props
+}: SelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownStyles, setDropdownStyles] = useState({});
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleOptionClick = (value: string | ReactNode) => {
-    setSelectedOption(value);
+  const handleOptionClick = (key: string) => {
     setIsOpen(false);
+    if (onChange) {
+      onChange(key);
+    }
   };
 
   useEffect(() => {
@@ -49,7 +57,8 @@ const Select = ({ label, className, options, ...props }: SelectProps) => {
       ref={containerRef}
     >
       <div className="styled-select" onClick={() => setIsOpen(!isOpen)}>
-        {selectedOption}
+        {options.find((option) => option.key === value)?.value ??
+          options[0].value}
       </div>
       {isOpen && (
         <div className="options-container" style={dropdownStyles}>
@@ -57,7 +66,7 @@ const Select = ({ label, className, options, ...props }: SelectProps) => {
             <div
               key={key}
               className="option"
-              onClick={() => handleOptionClick(value)}
+              onClick={() => handleOptionClick(key)}
             >
               {value}
             </div>

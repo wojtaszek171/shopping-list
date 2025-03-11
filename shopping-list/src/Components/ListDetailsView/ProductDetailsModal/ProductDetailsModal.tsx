@@ -33,6 +33,15 @@ const ProductDetailsModal = ({
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
+    setFormData({
+      name: product.name,
+      quantity: product.quantity,
+      category: product.category,
+      unit: product.unit,
+    });
+  }, [product]);
+
+  useEffect(() => {
     setIsChanged(
       formData.name !== product.name ||
         formData.quantity !== product.quantity ||
@@ -46,6 +55,14 @@ const ProductDetailsModal = ({
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCategoryChange = (key: string) => {
+    setFormData((prev) => ({ ...prev, category: key }));
+  };
+
+  const handleUnitChange = (key: string) => {
+    setFormData((prev) => ({ ...prev, unit: key }));
   };
 
   const handleClose = async (e: React.FormEvent) => {
@@ -90,7 +107,7 @@ const ProductDetailsModal = ({
           name="category"
           value={formData.category}
           options={categoryOptions}
-          onChange={console.log}
+          onChange={handleCategoryChange}
         />
       </div>
       <div className="row">
@@ -105,7 +122,7 @@ const ProductDetailsModal = ({
           name="unit"
           value={formData.unit}
           options={unitsOptions}
-          onChange={handleChange}
+          onChange={handleUnitChange}
         />
       </div>
     </div>
