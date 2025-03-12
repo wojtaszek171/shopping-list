@@ -6,10 +6,10 @@ import { useTranslation } from "react-i18next";
 import Button from "../../Button";
 import GoBackIcon from "../../../assets/icons/goback.svg";
 import Select from "../../Select";
-import { CategoriesEnum, units, UnitsEnum } from "../../../utils/consts";
+import { CategoriesEnum, UnitsEnum } from "../../../utils/consts";
 
 import "./ProductDetailsModal.scss";
-import useCategoriesIcons from "./useCategoriesIcons";
+import useCategories from "./useCategories";
 
 interface ProductDetailsModalProps {
   product: Product;
@@ -27,7 +27,7 @@ const ProductDetailsModal = ({
     category: product.category,
     unit: product.unit,
   });
-  const { getCategoryIcon } = useCategoriesIcons();
+  const { getCategory } = useCategories();
 
   const [updateProductDetails] = useUpdateProductMutation();
   const [isChanged, setIsChanged] = useState(false);
@@ -78,12 +78,19 @@ const ProductDetailsModal = ({
     onClose();
   };
 
-  const categoryOptions = Object.entries(CategoriesEnum).map(
-    ([key, value]) => ({
+  const categoryOptions = Object.entries(CategoriesEnum).map(([key, value]) => {
+    const c = getCategory(value);
+    return {
       key: key,
-      value: getCategoryIcon(value),
-    }),
-  );
+      optionLabel: (
+        <div className="category-option">
+          <div className="category-icon">{c.icon}</div>
+          <span className="category-title">{t(c.key)}</span>
+        </div>
+      ),
+      value: <div className="category-icon">{c.icon}</div>,
+    };
+  });
 
   const unitsOptions = Object.entries(UnitsEnum).map(([key, value]) => ({
     key,

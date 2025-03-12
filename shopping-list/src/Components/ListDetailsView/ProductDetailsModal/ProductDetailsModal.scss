@@ -7,7 +7,24 @@
   }
 
   .category-select {
-    width: 46px;
+    .category-option {
+      display: flex;
+      flex-direction: row;
+
+      .category-title {
+        flex: 1;
+        margin-left: 10px;
+      }
+    }
+    .category-icon {
+      width: 20px;
+      height: 20px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 
   .row {

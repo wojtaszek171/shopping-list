@@ -9,6 +9,7 @@ interface SelectProps
   options: {
     key: string;
     value: string | ReactNode;
+    optionLabel: string | ReactNode;
   }[];
   onChange?: (key: string) => void;
 }
@@ -31,6 +32,26 @@ const Select = ({
       onChange(key);
     }
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      containerRef.current &&
+      !containerRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && containerRef.current) {
@@ -62,13 +83,13 @@ const Select = ({
       </div>
       {isOpen && (
         <div className="options-container" style={dropdownStyles}>
-          {options.map(({ key, value }) => (
+          {options.map(({ key, value, optionLabel }) => (
             <div
               key={key}
               className="option"
               onClick={() => handleOptionClick(key)}
             >
-              {value}
+              {optionLabel ?? value}
             </div>
           ))}
         </div>

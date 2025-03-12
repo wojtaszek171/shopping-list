@@ -53,12 +53,21 @@ const categpryIconMapping = {
   [CategoriesEnum.other]: <Other />,
 };
 
-const useCategoriesIcons = () => {
-  const getCategoryIcon = (key: CategoriesEnum) => categpryIconMapping[key];
+const useCategories = () => {
+  const getCategory = (key: CategoriesEnum) => ({
+    key: key,
+    icon: categpryIconMapping[key],
+  });
+
+  const getAllCategories = () =>
+    Object.keys(categpryIconMapping).map((key) =>
+      getCategory(key as CategoriesEnum),
+    );
 
   return {
-    getCategoryIcon,
+    getCategory,
+    getAllCategories,
   };
 };
 
-export default useCategoriesIcons;
+export default useCategories;

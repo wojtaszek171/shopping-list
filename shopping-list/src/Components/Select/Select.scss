@@ -4,6 +4,7 @@
 }
 
 .styled-select {
+  cursor: pointer;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -39,7 +40,6 @@
 
 .options-container {
   position: absolute;
-  width: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;

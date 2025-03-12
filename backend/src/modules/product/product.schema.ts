@@ -5,6 +5,7 @@ import { List } from '../list/list.schema';
 export type ProductDocument = HydratedDocument<Product>;
 
 export enum Unit {
+  NONE = 'none',
   PIECE = 'piece',
   KILOGRAM = 'kilogram',
   LITER = 'liter',
@@ -20,7 +21,7 @@ export class Product {
   @Prop()
   quantity: number;
 
-  @Prop({ enum: Unit, default: Unit.PIECE })
+  @Prop({ enum: Unit, default: Unit.NONE })
   unit: Unit;
 
   @Prop({ default: false })
@@ -29,7 +30,7 @@ export class Product {
   @Prop({ type: Types.ObjectId, ref: List.name, required: true })
   list: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: 'other' })
   category: string;
 }
 
