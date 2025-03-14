@@ -11,7 +11,7 @@ export class User {
   username: string;
   @Prop({ required: true, unique: true, lowercase: true })
   email: string;
-  @Prop({ required: true })
+  @Prop({ required: true, select: false })
   password: string;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

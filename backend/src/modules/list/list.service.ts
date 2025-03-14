@@ -13,6 +13,7 @@ export class ListService {
   ) {}
 
   async create(listDto: CreateListDto, userId?: string) {
+    if (!userId) throw new NotFoundException('User ID is required');
     const list = {
       ...listDto,
       users: [{ user: userId, role: UserRole.OWNER }]

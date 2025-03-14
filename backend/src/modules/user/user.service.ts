@@ -18,6 +18,10 @@ export class UserService {
     return this.userRepository.findByEmail(email);
   }
 
+  async findByEmailWithPassword(email: string) {
+    return this.userRepository.findByEmailWithPassword(email);
+  }
+
   async findById(id: string): Promise<SafeUserDto> {
     const user = await this.userRepository.findById(id);
     if (!user) throw new NotFoundException('User not found');

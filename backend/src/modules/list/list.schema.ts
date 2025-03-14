@@ -22,7 +22,7 @@ export class List {
       }
     ]
   })
-  users: { user: User; role: UserRole }[];
+  users: { user: Types.ObjectId | User; role: UserRole }[];
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

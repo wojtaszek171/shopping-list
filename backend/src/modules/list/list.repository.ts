@@ -14,7 +14,7 @@ export class ListRepository {
   }
 
   async findAll(): Promise<ListDocument[]> {
-    return this.listModel.find().populate('users.user').exec();
+    return this.listModel.find().populate('users.user', '-password').exec();
   }
 
   async findOne(id: string): Promise<ListDocument | null> {
@@ -27,6 +27,7 @@ export class ListRepository {
   ): Promise<ListDocument | null> {
     return this.listModel
       .findByIdAndUpdate(id, updateDto, { new: true })
+      .populate('users.user')
       .exec();
   }
 
