@@ -3,7 +3,7 @@ import { ListRepository } from './list.repository';
 import { ProductRepository } from '../product/product.repository';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
-import { UserRole } from './list.schema';
+import { ListDocument, UserRole } from './list.schema';
 
 @Injectable()
 export class ListService {
@@ -21,8 +21,8 @@ export class ListService {
     return this.listRepository.create(list);
   }
 
-  async findAll() {
-    const lists = await this.listRepository.findAll();
+  async findAll(userId: string): Promise<ListDocument[]> {
+    const lists = await this.listRepository.findAll(userId);
     return Promise.all(
       lists.map(async (list) => {
         const products = await this.productRepository.findByListId(
@@ -37,11 +37,12 @@ export class ListService {
     );
   }
 
-  async findOne(id: string) {
-    if (!id) throw new NotFoundException('List ID is required');
-    const list = await this.listRepository.findOne(id);
-    if (!list) throw new NotFoundException('List not found');
-    const products = await this.productRepository.findByListId(id);
+  async findOne(id: string, userId: string): Promise<ListDocument | null> {
+    const list = await this.listRepository.findOne(id, userId);
+
+    const products = await this.productRepository.findByListId(
+      list.id as string
+    );
     return {
       ...list.toObject(),
       allProductsCount: products.length,
@@ -54,6 +55,10 @@ export class ListService {
   }
 
   async delete(id: string) {
-    return this.listRepository.delete(id);
+    const list = await this.listRepository.delete(id);
+    if (list) {
+      await this.productRepository.deleteByListId(id);
+    }
+    return list;
   }
 }

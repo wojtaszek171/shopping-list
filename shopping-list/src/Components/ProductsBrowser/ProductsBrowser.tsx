@@ -46,6 +46,7 @@ const ProductsBrowser = ({ listId, onClose }: ProductsBrowserProps) => {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={t("product")}
+          autoFocus
         />
         <ul>
           {[{ id: query, name: query }, ...suggestedProducts]?.map(

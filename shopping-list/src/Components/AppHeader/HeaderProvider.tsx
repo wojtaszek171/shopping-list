@@ -1,7 +1,13 @@
-import React, { createContext, useState, ReactNode, ReactElement } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  ReactElement,
+  MouseEvent,
+} from "react";
 
 interface HeaderButton {
-  action: () => void;
+  action: (e: MouseEvent<HTMLButtonElement>) => void;
   title?: string;
   icon?: ReactElement;
   hidden?: boolean;

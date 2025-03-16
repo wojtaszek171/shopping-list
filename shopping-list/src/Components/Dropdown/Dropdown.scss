@@ -22,6 +22,12 @@
     justify-content: space-between;
   }
 
+  .dropdown-separator {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 5px 0;
+  }
+
   .dropdown-option {
     background: none;
     border: none;
@@ -36,6 +42,11 @@
       transition:
         background-color 0.3s ease,
         color 0.3s ease;
+    }
+
+    &.active {
+      background-color: #d0d0d0;
+      color: #000;
     }
   }
 }

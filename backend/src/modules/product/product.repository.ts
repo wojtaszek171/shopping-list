@@ -31,4 +31,8 @@ export class ProductRepository {
   async delete(id: string): Promise<Product | null> {
     return this.productModel.findByIdAndDelete(id).exec();
   }
+
+  async deleteByListId(listId: string): Promise<void> {
+    await this.productModel.deleteMany({ list: listId }).exec();
+  }
 }

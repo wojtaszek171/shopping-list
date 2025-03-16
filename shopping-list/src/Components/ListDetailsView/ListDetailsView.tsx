@@ -5,14 +5,16 @@ import { useGetListQuery } from "../../services/api/list.api";
 import { useEffect, useState } from "react";
 import AddIcon from "../../assets/icons/add.svg";
 import DeleteIcon from "../../assets/icons/delete.svg";
+import SortIcon from "../../assets/icons/sort.svg";
 import MultiSelectIcon from "../../assets/icons/multi-select.svg";
 import Button from "../Button";
 import { useHeader } from "../AppHeader/HeaderProvider";
 import ProductsBrowser from "../ProductsBrowser/ProductsBrowser";
-import "./ListDetailsView.scss";
 import ProductItem from "./ProductItem/ProductItem";
-import { useContextMenu } from "../ContextMenu/useContextMenu";
 import useIsTouch from "../../hooks/useIsTouch";
+import Dropdown from "../Dropdown/Dropdown";
+import { useTranslation } from "react-i18next";
+import "./ListDetailsView.scss";
 
 const ListDetailsView = () => {
   const { id } = useParams();
@@ -23,7 +25,10 @@ const ListDetailsView = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
   const isTouchDevice = useIsTouch();
-  const { openMenu, closeMenu } = useContextMenu();
+  const [isSortDropdownOpen, setSortDropdownOpen] = useState(false);
+  const { t } = useTranslation();
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortOrder, setSortOrder] = useState<string>("asc");
 
   useEffect(() => {
     if (listData?.name) {
@@ -56,8 +61,64 @@ const ListDetailsView = () => {
     setIsSelecting(true);
   };
 
+  const handleSortClick = () => {
+    setSortDropdownOpen((prev) => !prev);
+  };
+
+  const handleSortFieldClick = (field: string) => {
+    setSortField(field);
+  };
+
+  const handleSortOrderClick = (order: string) => {
+    setSortOrder(order);
+  };
+
+  const sortOptions = [
+    {
+      label: t("sortByName"),
+      onClick: () => handleSortFieldClick("name"),
+      active: sortField === "name",
+    },
+    {
+      label: t("sortByDateAdded"),
+      onClick: () => handleSortFieldClick("dateAdded"),
+      active: sortField === "dateAdded",
+    },
+    {
+      label: t("sortByCategory"),
+      onClick: () => handleSortFieldClick("category"),
+      active: sortField === "category",
+    },
+    { isSeparator: true },
+    {
+      label: t("ascending"),
+      onClick: () => handleSortOrderClick("asc"),
+      active: sortOrder === "asc",
+    },
+    {
+      label: t("descending"),
+      onClick: () => handleSortOrderClick("desc"),
+      active: sortOrder === "desc",
+    },
+  ];
+
+  const sortProducts = (products: any[]) => {
+    if (!sortField) return products;
+
+    const sortedProducts = [...products];
+    sortedProducts.sort((a, b) => {
+      const compare = (a[sortField] || "").localeCompare(b[sortField] || "");
+      return sortOrder === "asc" ? compare : -compare;
+    });
+    return sortedProducts;
+  };
+
   useEffect(() => {
     setButtons([
+      {
+        action: handleSortClick,
+        icon: <SortIcon />,
+      },
       {
         action: () => {},
         icon: <DeleteIcon />,
@@ -96,16 +157,24 @@ const ListDetailsView = () => {
 
   return (
     <div className="list-details-component">
-      {productsData?.map((product) => (
-        <ProductItem
-          key={product._id}
-          {...product}
-          isSelecting={isSelecting}
-          isSelected={selectedProducts.includes(product._id)}
-          onSelect={() => handleSelectProduct(product._id)}
-          onLongPress={() => handleLongPress(product._id)}
-        />
-      ))}
+      {isSortDropdownOpen && (
+        <Dropdown className="sort-dropdown" options={sortOptions} />
+      )}
+      <div className="product-list">
+        {sortProducts(productsData)
+          ?.slice()
+          .sort((a, b) => Number(a.completed) - Number(b.completed))
+          .map((product) => (
+            <ProductItem
+              key={product._id}
+              {...product}
+              isSelecting={isSelecting}
+              isSelected={selectedProducts.includes(product._id)}
+              onSelect={() => handleSelectProduct(product._id)}
+              onLongPress={() => handleLongPress(product._id)}
+            />
+          ))}
+      </div>
       <Button
         onClick={handleCreateProduct}
         size="icon"

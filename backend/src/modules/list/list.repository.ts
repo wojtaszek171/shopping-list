@@ -13,12 +13,15 @@ export class ListRepository {
     return new this.listModel(todo).save();
   }
 
-  async findAll(): Promise<ListDocument[]> {
-    return this.listModel.find().populate('users.user', '-password').exec();
+  async findAll(userId: string): Promise<ListDocument[]> {
+    return this.listModel.find({ 'users.user': userId }).exec();
   }
 
-  async findOne(id: string): Promise<ListDocument | null> {
-    return this.listModel.findById(id).populate('users.user').exec();
+  async findOne(id: string, userId: string): Promise<ListDocument | null> {
+    return this.listModel
+      .findOne({ _id: id, 'users.user': userId })
+      .populate('users.user')
+      .exec();
   }
 
   async update(

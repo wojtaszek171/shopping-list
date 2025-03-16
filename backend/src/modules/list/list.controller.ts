@@ -6,7 +6,8 @@ import {
   Body,
   Patch,
   Delete,
-  Req
+  Req,
+  ForbiddenException
 } from '@nestjs/common';
 import { ListService } from './list.service';
 import { CreateListDto } from './dto/create-list.dto';
@@ -22,22 +23,38 @@ export class ListController {
   }
 
   @Get()
-  findAll() {
-    return this.listService.findAll();
+  findAll(@Req() req) {
+    return this.listService.findAll(req.user.userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.listService.findOne(id);
+  async findOne(@Param('id') id: string, @Req() req) {
+    const list = await this.listService.findOne(id, req.user.userId);
+    if (!list) {
+      throw new ForbiddenException('You do not have access to this list');
+    }
+    return list;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateListDto: UpdateListDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateListDto: UpdateListDto,
+    @Req() req
+  ) {
+    const list = await this.listService.findOne(id, req.user.userId);
+    if (!list) {
+      throw new ForbiddenException('You do not have access to this list');
+    }
     return this.listService.update(id, updateListDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Req() req) {
+    const list = await this.listService.findOne(id, req.user.userId);
+    if (!list) {
+      throw new ForbiddenException('You do not have access to this list');
+    }
     return this.listService.delete(id);
   }
 }

@@ -21,4 +21,17 @@
       height: 100%;
     }
   }
+
+  .sort-dropdown {
+    background: white;
+    position: absolute;
+    top: 0; // Adjust as needed
+    width: 100%;
+    z-index: 1000;
+  }
+}
+
+.product-list {
+  max-height: 80vh;
+  overflow-y: auto;
 }

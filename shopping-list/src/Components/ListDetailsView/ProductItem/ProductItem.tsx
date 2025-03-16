@@ -8,12 +8,11 @@ import Input from "../../Input";
 import { useUpdateProductMutation } from "../../../services/api/product.api";
 import { Product } from "../../../services/types";
 import useIsTouch from "../../../hooks/useIsTouch";
-import useCategory from "../../../hooks/useCategory";
-import "./ProductItem.scss";
 import { useDialog } from "../../Dialog/useDialog";
 import ProductDetailsModal from "../ProductDetailsModal/ProductDetailsModal";
 import useCategories from "../ProductDetailsModal/useCategories";
 import { CategoriesEnum } from "../../../utils/consts";
+import "./ProductItem.scss";
 
 interface ProductItemComponentProps extends Product {
   isSelecting: boolean;
@@ -90,7 +89,7 @@ const ProductItem = ({
 
   return (
     <div
-      className="product-item-wrapper"
+      className={`product-item-wrapper${completed ? " completed" : ""}`}
       onClick={isSelecting ? onSelect : handleOpenProductDetails}
       onKeyDown={handleKeyDown}
       onMouseDown={handleMouseDown}
