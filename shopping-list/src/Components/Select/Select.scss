@@ -1,15 +1,21 @@
 .select-container {
   position: relative;
   margin: 10px 0;
+  height: 50px;
 }
 
 .styled-select {
+  display: flex;
+  align-items: center;
   cursor: pointer;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
   color: #333333;
   padding: 10px;
+  height: 100%; // Match the height of the select-container
+  box-sizing: border-box; // Include padding and border in the height calculation
+
   transition:
     border-color 0.3s,
     box-shadow 0.3s;

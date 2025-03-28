@@ -12,6 +12,8 @@
   z-index: 2;
 
   .products-browser-dialog {
+    display: flex;
+    flex-direction: column;
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -20,13 +22,20 @@
     overflow-y: auto;
 
     .products-browser-header {
-      float: right;
-    }
-
-    input {
-      width: auto;
-      padding: 8px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       margin-bottom: 10px;
+
+      .products-browser-input {
+        flex: 1;
+        margin-right: 10px;
+      }
+
+      .close-button {
+        width: 40px;
+        height: 40px;
+      }
     }
 
     ul {

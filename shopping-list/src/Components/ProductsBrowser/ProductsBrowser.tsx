@@ -3,6 +3,7 @@ import { useCreateProductMutation } from "../../services/api/product.api";
 import { useTranslation } from "react-i18next";
 import Button from "../Button";
 import CloseIcon from "../../assets/icons/close.svg";
+import Input from "../Input";
 import "./ProductsBrowser.scss";
 
 type ProductOption = {
@@ -36,18 +37,19 @@ const ProductsBrowser = ({ listId, onClose }: ProductsBrowserProps) => {
     <div className="products-browser">
       <div className="products-browser-dialog">
         <div className="products-browser-header">
-          <Button size="icon" onClick={onClose}>
+          <Input
+            className="products-browser-input"
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={t("product")}
+            autoFocus
+          />
+          <Button className="close-button" size="icon" onClick={onClose}>
             <CloseIcon />
           </Button>
         </div>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={t("product")}
-          autoFocus
-        />
         <ul>
           {[{ id: query, name: query }, ...suggestedProducts]?.map(
             (product) => (
