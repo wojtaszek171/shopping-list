@@ -30,7 +30,6 @@ export class ProductController {
 
   @Put(':id')
   async update(
-    @Param('listId') listId: string,
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto
   ) {
@@ -38,7 +37,7 @@ export class ProductController {
   }
 
   @Delete(':id')
-  async delete(@Param('listId') listId: string, @Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     return this.productRepository.delete(id);
   }
 }

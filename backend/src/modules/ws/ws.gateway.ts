@@ -45,13 +45,18 @@ export class WsGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  emitListUpdated() {
-    this.logger.log(`List updated`);
-
-    this.server.emit('listUpdated');
+  emitListUpdated(listId: string) {
+    this.logger.log(`List ${listId} updated`);
+    this.server.to(listId).emit(`listUpdated:${listId}`);
   }
 
-  emitListDeleted() {
-    this.server.emit('listDeleted');
+  emitListDeleted(listId: string) {
+    this.logger.log(`List ${listId} deleted`);
+    this.server.to(listId).emit(`listDeleted:${listId}`);
+  }
+
+  emitListProductsUpdated(listId: string) {
+    this.logger.log(`List ${listId} products updated`);
+    this.server.to(listId).emit(`listProductsUpdated:${listId}`);
   }
 }

@@ -59,7 +59,7 @@ export class ListService {
 
   async update(id: string, updateDto: UpdateListDto) {
     const updatedList = await this.listRepository.update(id, updateDto);
-    this.wsGateway.emitListUpdated();
+    this.wsGateway.emitListUpdated(id);
     return updatedList;
   }
 
@@ -67,7 +67,7 @@ export class ListService {
     const deletedList = await this.listRepository.delete(id);
     if (deletedList) {
       await this.productRepository.deleteByListId(id);
-      this.wsGateway.emitListDeleted();
+      this.wsGateway.emitListDeleted(id);
     }
     return deletedList;
   }

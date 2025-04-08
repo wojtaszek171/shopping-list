@@ -14,12 +14,21 @@ import ProductItem from "./ProductItem/ProductItem";
 import useIsTouch from "../../hooks/useIsTouch";
 import Dropdown from "../Dropdown/Dropdown";
 import { useTranslation } from "react-i18next";
+import {
+  joinListRoom,
+  leaveListRoom,
+  listenForListRoomEvents,
+  removeListRoomListeners,
+} from "../../services/api/ws/listListeners";
 import "./ListDetailsView.scss";
 
 const ListDetailsView = () => {
   const { id } = useParams();
-  const { data: listData } = useGetListQuery(id ?? skipToken);
-  const { data: productsData } = useGetProductsByListIdQuery(id ?? skipToken);
+  const { data: listData, refetch: refetchList } = useGetListQuery(
+    id ?? skipToken,
+  );
+  const { data: productsData, refetch: refetchProducts } =
+    useGetProductsByListIdQuery(id ?? skipToken);
   const { setTitle, setButtons } = useHeader();
   const [isProductsBrowserOpen, setProductsBrowserOpen] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -39,6 +48,31 @@ const ListDetailsView = () => {
       setTitle("");
     };
   }, [listData?.name, setTitle]);
+
+  useEffect(() => {
+    if (listData?._id) {
+      joinListRoom(listData._id);
+
+      const handleListDeleted = () => {
+        console.log("List deleted, navigating away...");
+        // Add logic to handle list deletion, e.g., navigate to another page
+      };
+
+      listenForListRoomEvents(
+        listData._id,
+        refetchList,
+        handleListDeleted,
+        refetchProducts,
+      );
+    }
+
+    return () => {
+      if (listData?._id) {
+        removeListRoomListeners(listData._id);
+        leaveListRoom(listData._id);
+      }
+    };
+  }, [listData, refetchList, refetchProducts]);
 
   const handleCreateProduct = () => {
     setProductsBrowserOpen(true);

@@ -4,11 +4,13 @@ import { Model } from 'mongoose';
 import { Product, ProductDocument } from './product.schema';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { WsGateway } from '../ws/ws.gateway';
 
 @Injectable()
 export class ProductRepository {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>
+    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    private readonly wsGateway: WsGateway
   ) {}
 
   async create(productDto: CreateProductDto): Promise<Product> {
@@ -23,9 +25,15 @@ export class ProductRepository {
     id: string,
     updateDto: UpdateProductDto
   ): Promise<Product | null> {
-    return this.productModel
+    const updatedList = await this.productModel
       .findByIdAndUpdate(id, updateDto, { new: true })
       .exec();
+
+    if (updatedList?.list) {
+      this.wsGateway.emitListProductsUpdated(updatedList.list.toString());
+    }
+
+    return updatedList;
   }
 
   async delete(id: string): Promise<Product | null> {
