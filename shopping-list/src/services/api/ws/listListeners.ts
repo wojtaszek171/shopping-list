@@ -1,3 +1,4 @@
+import { Product } from "../../types";
 import socket from "../socket";
 
 export const joinListRoom = (listId: string) => {
@@ -29,7 +30,7 @@ export const listenForListRoomEvents = (
   listId: string,
   onListUpdated: () => void,
   onListDeleted: () => void,
-  onListProductsUpdated: () => void = () => {},
+  onListProductsUpdated: (updatedProduct: Product) => void,
 ) => {
   socket.on(`listUpdated:${listId}`, () => {
     console.log(`List ${listId} updated`);
@@ -41,9 +42,9 @@ export const listenForListRoomEvents = (
     onListDeleted();
   });
 
-  socket.on(`listProductsUpdated:${listId}`, () => {
+  socket.on(`listProductsUpdated:${listId}`, (updatedProduct) => {
     console.log(`List ${listId} products updated`);
-    onListProductsUpdated();
+    onListProductsUpdated(updatedProduct);
   });
 };
 

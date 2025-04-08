@@ -21,6 +21,7 @@ import {
   removeListRoomListeners,
 } from "../../services/api/ws/listListeners";
 import "./ListDetailsView.scss";
+import { Product } from "../../services/types";
 
 const ListDetailsView = () => {
   const { id } = useParams();
@@ -58,11 +59,15 @@ const ListDetailsView = () => {
         // Add logic to handle list deletion, e.g., navigate to another page
       };
 
+      const handleProductChange = (updatedProduct: Product) => {
+        refetchProducts();
+      };
+
       listenForListRoomEvents(
         listData._id,
         refetchList,
         handleListDeleted,
-        refetchProducts,
+        handleProductChange,
       );
     }
 

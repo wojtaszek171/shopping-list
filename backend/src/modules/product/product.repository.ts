@@ -25,15 +25,15 @@ export class ProductRepository {
     id: string,
     updateDto: UpdateProductDto
   ): Promise<Product | null> {
-    const updatedList = await this.productModel
+    const updatedProduct = await this.productModel
       .findByIdAndUpdate(id, updateDto, { new: true })
       .exec();
 
-    if (updatedList?.list) {
-      this.wsGateway.emitListProductsUpdated(updatedList.list.toString());
+    if (updatedProduct?.list) {
+      this.wsGateway.emitListProductsUpdated(updatedProduct);
     }
 
-    return updatedList;
+    return updatedProduct;
   }
 
   async delete(id: string): Promise<Product | null> {

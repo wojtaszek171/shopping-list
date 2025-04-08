@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { Product } from '../product/product.schema';
 
 @WebSocketGateway({
   cors: {
@@ -55,8 +56,11 @@ export class WsGateway
     this.server.to(listId).emit(`listDeleted:${listId}`);
   }
 
-  emitListProductsUpdated(listId: string) {
+  emitListProductsUpdated(updatedProduct: Product) {
+    const listId = updatedProduct.list.toString();
     this.logger.log(`List ${listId} products updated`);
-    this.server.to(listId).emit(`listProductsUpdated:${listId}`);
+    this.server
+      .to(listId)
+      .emit(`listProductsUpdated:${listId}`, updatedProduct);
   }
 }
