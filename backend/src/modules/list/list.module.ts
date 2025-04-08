@@ -5,6 +5,7 @@ import { ListController } from './list.controller';
 import { List, ListSchema } from './list.schema';
 import { ListRepository } from './list.repository';
 import { ProductModule } from '../product/product.module';
+import { WsGateway } from '../ws/ws.gateway';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { ProductModule } from '../product/product.module';
     ProductModule
   ],
   controllers: [ListController],
-  providers: [ListService, ListRepository]
+  providers: [ListService, ListRepository, WsGateway]
 })
 export class ListModule {}

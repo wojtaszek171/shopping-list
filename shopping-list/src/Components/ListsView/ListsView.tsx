@@ -14,11 +14,16 @@ import { useHeader } from "../AppHeader/HeaderProvider";
 import DeleteIcon from "../../assets/icons/delete.svg";
 import { useDialog } from "../Dialog/useDialog";
 import useIsTouch from "../../hooks/useIsTouch";
+import {
+  listenForListsChanges,
+  removeListsListeners,
+} from "../../services/api/ws/listListeners";
+import { useCheckSessionQuery } from "../../services/api/user.api";
 import "./ListsView.scss";
 
 const ListsView: React.FC = () => {
   const { t } = useTranslation();
-  const { data: lists, isLoading } = useGetAllListsQuery();
+  const { data: lists, isLoading, refetch } = useGetAllListsQuery();
   const [createList] = useCreateListMutation();
   const [deleteList] = useRemoveListMutation();
 
@@ -27,6 +32,17 @@ const ListsView: React.FC = () => {
   const [isSelecting, setIsSelecting] = useState(false);
   const { setTitle, setButtons } = useHeader();
   const { openDialog, closeDialog, updateDialog } = useDialog();
+  const { isSuccess } = useCheckSessionQuery();
+
+  useEffect(() => {
+    if (isSuccess) {
+      listenForListsChanges(refetch);
+    }
+
+    return () => {
+      removeListsListeners();
+    };
+  }, [isSuccess, refetch]);
 
   const handleCreateList = () => {
     createList({ name: t("newList") });

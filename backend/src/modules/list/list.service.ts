@@ -4,12 +4,14 @@ import { ProductRepository } from '../product/product.repository';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { ListDocument, UserRole } from './list.schema';
+import { WsGateway } from '../ws/ws.gateway';
 
 @Injectable()
 export class ListService {
   constructor(
     private readonly listRepository: ListRepository,
-    private readonly productRepository: ProductRepository
+    private readonly productRepository: ProductRepository,
+    private readonly wsGateway: WsGateway // Inject WebSocket gateway
   ) {}
 
   async create(listDto: CreateListDto, userId?: string) {
@@ -18,7 +20,8 @@ export class ListService {
       ...listDto,
       users: [{ user: userId, role: UserRole.OWNER }]
     };
-    return this.listRepository.create(list);
+    const createdList = await this.listRepository.create(list);
+    return createdList;
   }
 
   async findAll(userId: string): Promise<ListDocument[]> {
@@ -40,6 +43,10 @@ export class ListService {
   async findOne(id: string, userId: string): Promise<ListDocument | null> {
     const list = await this.listRepository.findOne(id, userId);
 
+    if (!list) {
+      throw new NotFoundException('List not found');
+    }
+
     const products = await this.productRepository.findByListId(
       list.id as string
     );
@@ -51,14 +58,17 @@ export class ListService {
   }
 
   async update(id: string, updateDto: UpdateListDto) {
-    return this.listRepository.update(id, updateDto);
+    const updatedList = await this.listRepository.update(id, updateDto);
+    this.wsGateway.emitListUpdated();
+    return updatedList;
   }
 
   async delete(id: string) {
-    const list = await this.listRepository.delete(id);
-    if (list) {
+    const deletedList = await this.listRepository.delete(id);
+    if (deletedList) {
       await this.productRepository.deleteByListId(id);
+      this.wsGateway.emitListDeleted();
     }
-    return list;
+    return deletedList;
   }
 }
