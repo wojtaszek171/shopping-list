@@ -27,7 +27,7 @@ export enum CategoriesEnum {
 }
 
 export enum UnitsEnum {
-  [""] = "none",
+  "" = "none",
   pcs = "piece",
   kg = "kilogram",
   l = "liter",
