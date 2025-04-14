@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import socket from "./socket";
 
-const API_HOST = import.meta.env.VITE_API_HOST;
+const API_HOST = window.__RUNTIME_CONFIG__ ?? import.meta.env.VITE_API_HOST;
 
 export const allTags = ["List", "Products"];
 
