@@ -1,4 +1,4 @@
-# Stage 1: Build Stage
+# Stage 1: Build
 FROM node:18 AS build
 
 WORKDIR /usr/src/app
@@ -9,11 +9,28 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: Production Stage
-FROM nginx:alpine AS production
+# Copy .htaccess manually
+RUN cp public/.htaccess dist/.htaccess
 
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+# Stage 2: Apache Server
+FROM httpd:alpine
 
-EXPOSE 80
+# Enable mod_rewrite
+RUN sed -i '/^#LoadModule rewrite_module/s/^#//' /usr/local/apache2/conf/httpd.conf
 
-CMD ["nginx", "-g", "daemon off;"]
+# Create temp app directory
+RUN mkdir /app
+
+# Copy built app to temporary location
+COPY --from=build /usr/src/app/dist /app
+
+# Enable .htaccess
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /usr/local/apache2/conf/httpd.conf && \
+    printf '\n<Directory "/usr/local/apache2/htdocs">\n  AllowOverride All\n</Directory>\n' >> /usr/local/apache2/conf/httpd.conf
+
+# Start-up script to copy files only if volume is empty
+CMD sh -c ' \
+  if [ ! -f /usr/local/apache2/htdocs/index.html ]; then \
+    cp -r /app/* /usr/local/apache2/htdocs/; \
+  fi && \
+  httpd-foreground'
