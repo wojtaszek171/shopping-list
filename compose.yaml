@@ -38,6 +38,6 @@ services:
     ports:
       - '3001:3001'
     environment:
-      - VITE_API_HOST=
+      - API_HOST=
     volumes:
       - /path/to/your/react-build:/usr/share/nginx/html # You can update this path

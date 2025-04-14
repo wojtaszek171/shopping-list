@@ -1,4 +1,4 @@
-# Stage 1: Build
+# Stage 1: Build Stage
 FROM node:18 AS build
 
 WORKDIR /usr/src/app
@@ -8,8 +8,6 @@ RUN npm install
 
 COPY . .
 RUN npm run build
-
-# Copy .htaccess manually
 RUN cp public/.htaccess dist/.htaccess
 
 # Stage 2: Apache Server
@@ -18,7 +16,7 @@ FROM httpd:alpine
 # Enable mod_rewrite
 RUN sed -i '/^#LoadModule rewrite_module/s/^#//' /usr/local/apache2/conf/httpd.conf
 
-# Create temp app directory
+# Create temporary app directory
 RUN mkdir /app
 
 # Copy built app to temporary location
@@ -30,7 +28,8 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/g' /usr/local/apache2/conf/ht
 
 # Start-up script to copy files only if volume is empty
 CMD sh -c ' \
-  if [ ! -f /usr/local/apache2/htdocs/index.html ]; then \
-    cp -r /app/* /usr/local/apache2/htdocs/; \
-  fi && \
+  echo "window.__RUNTIME_CONFIG__ = {" \
+  "API_URL: \"${API_URL}\"," \
+  "FEATURE_X: \"${FEATURE_X}\"" \
+  "};" > /usr/local/apache2/htdocs/runtime-env.js && \
   httpd-foreground'
