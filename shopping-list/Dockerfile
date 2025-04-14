@@ -34,7 +34,7 @@ CMD sh -c ' \
     cp -r /app/* /usr/local/apache2/htdocs/; \
     echo "window.__RUNTIME_CONFIG__ = {" \
       "API_HOST: \"${API_HOST}\"," \
-    "};" > /usr/local/apache2/htdocs/runtime-env.js && \
-  fi && \
+    "};" > /usr/local/apache2/htdocs/runtime-env.js; \
+  fi; \
   httpd-foreground'
 
