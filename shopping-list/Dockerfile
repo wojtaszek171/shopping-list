@@ -29,12 +29,12 @@ RUN sed -i 's/AllowOverride None/AllowOverride All/g' /usr/local/apache2/conf/ht
     printf '\n<Directory "/usr/local/apache2/htdocs">\n  AllowOverride All\n</Directory>\n' >> /usr/local/apache2/conf/httpd.conf
 
 # Start-up script to copy files only if volume is empty
-CMD sh -c ' \
+CMD ["sh", "-c", " \
   if [ ! -f /usr/local/apache2/htdocs/index.html ]; then \
     cp -r /app/* /usr/local/apache2/htdocs/; \
-    echo "window.__RUNTIME_CONFIG__ = {" \
-      "API_HOST: \"${API_HOST}\"," \
-    "};" > /usr/local/apache2/htdocs/runtime-env.js; \
+    echo \"window.__RUNTIME_CONFIG__ = {\" \
+      \"API_HOST: \\\"${API_HOST}\\\",\" \
+    \"};\" > /usr/local/apache2/htdocs/runtime-env.js; \
   fi; \
-  httpd-foreground'
+  httpd-foreground"]
 
