@@ -29,7 +29,10 @@ export const listApi = api.injectEndpoints({
       }),
       invalidatesTags: ["List"],
     }),
-    addOwner: builder.mutation<ListResponse, { id: string; ownerId: string }>({
+    addCollaborator: builder.mutation<
+      ListResponse,
+      { id: string; ownerId: string }
+    >({
       query: ({ id, ownerId }) => ({
         url: `lists/${id}/owner`,
         method: "PUT",
@@ -62,7 +65,7 @@ export const {
   useGetAllListsQuery,
   useCreateListMutation,
   useEditListMutation,
-  useAddOwnerMutation,
+  useAddCollaboratorMutation,
   useRemoveOwnerMutation,
   useRemoveListMutation,
 } = listApi;

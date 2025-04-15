@@ -16,10 +16,11 @@ import {
 import { useContextMenu } from "../../ContextMenu/useContextMenu";
 import { useTranslation } from "react-i18next";
 import EditIcon from "../../../assets/icons/edit.svg";
+import InviteIcon from "../../../assets/icons/invite.svg";
 import { useDialog } from "../../Dialog/useDialog";
 import Input from "../../Input";
-import "./ListItem.scss";
 import ProgressBar from "../../ProgressBar/ProgressBar";
+import "./ListItem.scss";
 
 interface ListItemProps {
   list: ListResponse;
@@ -44,6 +45,7 @@ const ListItem = ({
   const [editList] = useEditListMutation();
   const { openDialog, closeDialog, updateDialog } = useDialog();
   const newName = useRef(list.name);
+  const friendEmail = useRef("");
   const { t } = useTranslation();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -132,6 +134,32 @@ const ListItem = ({
     navigate(`/lists/${list._id}`);
   };
 
+  const handleInvite = () => {
+    openDialog({
+      closeButton: true,
+      title: t("inviteFriend"),
+      primaryButtonText: t("invite"),
+      onPrimaryButtonClick: () => {
+        closeDialog();
+      },
+      secondaryButtonText: t("cancel"),
+      onSecondaryButtonClick: closeDialog,
+      content: (
+        <>
+          <span>{t("shareListDescription")}</span>
+          <Input
+            type="email"
+            defaultValue={friendEmail.current}
+            onChange={(e) => {
+              friendEmail.current = e.target.value;
+            }}
+            autoFocus
+          />
+        </>
+      ),
+    });
+  };
+
   const handleMenuOpen = (
     e: MouseEvent<HTMLElement>,
     position?: { x: number; y: number },
@@ -146,6 +174,12 @@ const ListItem = ({
           icon: <EditIcon />,
           action: renameAction,
         },
+        {
+          text: t("invite"),
+          icon: <InviteIcon />,
+          action: handleInvite,
+        },
+
         {
           text: t("delete"),
           icon: <DeleteIcon />,
