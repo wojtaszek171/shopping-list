@@ -40,4 +40,33 @@ export class ListRepository {
   async delete(id: string): Promise<ListDocument | null> {
     return this.listModel.findByIdAndDelete(id).exec();
   }
+
+  async addUser(
+    listId: string,
+    user: { user: string; role: string; pending?: boolean }
+  ): Promise<ListDocument | null> {
+    return this.listModel
+      .findOneAndUpdate(
+        { _id: listId, 'users.user': { $ne: user.user } }, // Ensure the user is not already in the list
+        { $push: { users: user } },
+        { new: true }
+      )
+      .populate('users.user')
+      .exec();
+  }
+
+  async updateUserStatus(
+    listId: string,
+    userId: string,
+    update: { pending?: boolean }
+  ): Promise<ListDocument | null> {
+    return this.listModel
+      .findOneAndUpdate(
+        { _id: listId, 'users.user': userId },
+        { $set: { 'users.$.pending': update.pending } },
+        { new: true }
+      )
+      .populate('users.user')
+      .exec();
+  }
 }

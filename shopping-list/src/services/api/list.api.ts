@@ -29,26 +29,15 @@ export const listApi = api.injectEndpoints({
       }),
       invalidatesTags: ["List"],
     }),
-    addCollaborator: builder.mutation<
-      ListResponse,
-      { id: string; ownerId: string }
-    >({
-      query: ({ id, ownerId }) => ({
-        url: `lists/${id}/owner`,
-        method: "PUT",
-        body: { ownerId },
-      }),
-    }),
-    removeOwner: builder.mutation<
-      ListResponse,
-      { id: string; ownerId: string }
-    >({
-      query: ({ id, ownerId }) => ({
-        url: `lists/${id}/owner`,
-        method: "DELETE",
-        body: { ownerId },
-      }),
-    }),
+    inviteToList: builder.mutation<ListResponse, { id: string; email: string }>(
+      {
+        query: ({ id, email }) => ({
+          url: `lists/${id}/invite`,
+          method: "POST",
+          body: { email },
+        }),
+      },
+    ),
     removeList: builder.mutation<void, string>({
       query: (id) => ({
         url: `lists/${id}`,
@@ -65,7 +54,6 @@ export const {
   useGetAllListsQuery,
   useCreateListMutation,
   useEditListMutation,
-  useAddCollaboratorMutation,
-  useRemoveOwnerMutation,
+  useInviteToListMutation,
   useRemoveListMutation,
 } = listApi;

@@ -18,11 +18,12 @@ export class List {
     type: [
       {
         user: { type: Types.ObjectId, ref: 'User' },
-        role: { type: String, enum: UserRole }
+        role: { type: String, enum: UserRole },
+        pending: { type: Boolean, default: true }
       }
     ]
   })
-  users: { user: Types.ObjectId | User; role: UserRole }[];
+  users: { user: Types.ObjectId | User; role: UserRole; pending?: boolean }[];
 }
 
 export const ListSchema = SchemaFactory.createForClass(List);

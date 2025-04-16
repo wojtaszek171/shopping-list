@@ -53,3 +53,5 @@ export interface UpdateProductDto {
   unit?: string;
   completed?: boolean;
 }
+
+export interface Notification {}

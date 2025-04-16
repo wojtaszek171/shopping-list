@@ -11,6 +11,6 @@ import { User, UserSchema } from './user.schema';
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],
-  exports: [UserService, UserRepository]
+  exports: [UserService, UserRepository] // Export UserRepository
 })
 export class UserModule {}

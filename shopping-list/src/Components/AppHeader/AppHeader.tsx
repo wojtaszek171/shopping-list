@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import GoBackIcon from "../../assets/icons/goback.svg";
 import ProfileIcon from "../../assets/icons/profile.svg";
+import NotificationsIcon from "../../assets/icons/notifications.svg";
 import Dropdown from "../Dropdown/Dropdown";
 import { useTranslation } from "react-i18next";
 import {
@@ -9,6 +10,7 @@ import {
   useSignOutMutation,
 } from "../../services/api/user.api";
 import { HeaderContext } from "./HeaderProvider";
+import { useGetNotificationsQuery } from "../../services/api/notifications.api";
 import "./AppHeader.scss";
 
 const AppHeader = () => {
@@ -24,6 +26,7 @@ const AppHeader = () => {
     refetch: checkSession,
   } = useCheckSessionQuery();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { isSuccess: didNotificationsLoad } = useGetNotificationsQuery();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,17 +89,22 @@ const AppHeader = () => {
           </button>
         ))}
       {isSuccess && (
-        <div className="profile-button" ref={dropdownRef}>
-          <button onClick={handleProfileClick}>
-            <ProfileIcon />
+        <>
+          <button className="header-button" disabled={!didNotificationsLoad}>
+            <NotificationsIcon />
           </button>
-          {showDropdown && (
-            <Dropdown
-              title={sessionData?.fullname}
-              options={[{ label: t("logout"), onClick: handleLogout }]}
-            />
-          )}
-        </div>
+          <div className="profile-button" ref={dropdownRef}>
+            <button onClick={handleProfileClick}>
+              <ProfileIcon />
+            </button>
+            {showDropdown && (
+              <Dropdown
+                title={sessionData?.fullname}
+                options={[{ label: t("logout"), onClick: handleLogout }]}
+              />
+            )}
+          </div>
+        </>
       )}
     </header>
   );

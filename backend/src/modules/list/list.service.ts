@@ -1,17 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import { ListRepository } from './list.repository';
 import { ProductRepository } from '../product/product.repository';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { ListDocument, UserRole } from './list.schema';
 import { WsGateway } from '../ws/ws.gateway';
+import { NotificationsRepository } from '../notifications/notifications.repository';
+import { UserRepository } from '../user/user.repository'; // Import UserRepository
 
 @Injectable()
 export class ListService {
   constructor(
     private readonly listRepository: ListRepository,
     private readonly productRepository: ProductRepository,
-    private readonly wsGateway: WsGateway // Inject WebSocket gateway
+    private readonly wsGateway: WsGateway, // Inject WebSocket gateway
+    private readonly notificationsRepository: NotificationsRepository,
+    private readonly userRepository: UserRepository // Inject UserRepository
   ) {}
 
   async create(listDto: CreateListDto, userId?: string) {
@@ -70,5 +78,65 @@ export class ListService {
       this.wsGateway.emitListDeleted(id);
     }
     return deletedList;
+  }
+
+  async inviteUserByEmail(listId: string, email: string, ownerId: string) {
+    // Check if the user exists
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Find the list
+    const list = await this.listRepository.findOne(listId, ownerId);
+    if (!list) {
+      throw new NotFoundException('List not found');
+    }
+
+    // Add the user to the list with pending: false
+    const invitedUser = {
+      user: user._id.toString(),
+      role: UserRole.COLLABORATOR,
+      pending: false
+    };
+    const updatedList = await this.listRepository.addUser(listId, invitedUser);
+
+    if (!updatedList) {
+      throw new ConflictException('User is already invited to this list');
+    }
+
+    // Create a notification for the invited user
+    const message = `You have been invited to collaborate on the list: ${list.name}`;
+    await this.notificationsRepository.createInvitationNotification(
+      ownerId,
+      user._id.toString(),
+      listId,
+      message
+    );
+
+    return { message: 'User invited successfully' };
+  }
+
+  async acceptInvitation(listId: string, userId: string) {
+    // Find the list
+    const list = await this.listRepository.findOne(listId, userId);
+    if (!list) {
+      throw new NotFoundException('List not found or access denied');
+    }
+
+    // Check if the user is in the list and has a pending invitation
+    const userInList = list.users.find(
+      (user) => user.user.toString() === userId && user.pending
+    );
+    if (!userInList) {
+      throw new ConflictException('No pending invitation found for this user');
+    }
+
+    // Update the user's pending status to false
+    await this.listRepository.updateUserStatus(listId, userId, {
+      pending: false
+    });
+
+    return { message: 'Invitation accepted successfully' };
   }
 }

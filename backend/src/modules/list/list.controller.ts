@@ -57,4 +57,18 @@ export class ListController {
     }
     return this.listService.delete(id);
   }
+
+  @Post(':id/invite')
+  async inviteUser(
+    @Param('id') listId: string,
+    @Body('email') email: string,
+    @Req() req
+  ) {
+    return this.listService.inviteUserByEmail(listId, email, req.user.userId);
+  }
+
+  @Post(':id/accept-invitation')
+  async acceptInvitation(@Param('id') listId: string, @Req() req) {
+    return this.listService.acceptInvitation(listId, req.user.userId);
+  }
 }

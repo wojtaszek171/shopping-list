@@ -61,7 +61,9 @@ export const DialogProvider = ({ children }: PropsWithChildren) => {
             </div>
           )}
           <div className="dialog-content">{options?.content}</div>
-          <span className="dialog-error">{options?.error}</span>
+          {options?.error && (
+            <span className="dialog-error">{options?.error}</span>
+          )}
           {showFooter && (
             <div className="dialog-footer">
               {options.secondaryButtonText && (

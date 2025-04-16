@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {
   useEditListMutation,
+  useInviteToListMutation,
   useRemoveListMutation,
 } from "../../../services/api/list.api";
 import Button from "../../Button";
@@ -48,6 +49,7 @@ const ListItem = ({
   const friendEmail = useRef("");
   const { t } = useTranslation();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [invite] = useInviteToListMutation();
 
   const handleDelete = () => {
     updateDialog({
@@ -140,7 +142,16 @@ const ListItem = ({
       title: t("inviteFriend"),
       primaryButtonText: t("invite"),
       onPrimaryButtonClick: () => {
-        closeDialog();
+        invite({
+          id: list._id,
+          email: friendEmail.current,
+        })
+          .unwrap()
+          .catch((e) => {
+            updateDialog({
+              error: e?.data?.message,
+            });
+          });
       },
       secondaryButtonText: t("cancel"),
       onSecondaryButtonClick: closeDialog,
@@ -149,6 +160,7 @@ const ListItem = ({
           <span>{t("shareListDescription")}</span>
           <Input
             type="email"
+            placeholder="example@email.com"
             defaultValue={friendEmail.current}
             onChange={(e) => {
               friendEmail.current = e.target.value;
