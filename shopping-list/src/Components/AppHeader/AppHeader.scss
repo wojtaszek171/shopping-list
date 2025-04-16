@@ -28,6 +28,9 @@
     flex: 1;
     font-size: 1.5rem;
     margin-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    text-wrap-mode: nowrap;
   }
 
   .profile-button {
@@ -80,6 +83,15 @@
 
   &.active svg {
     fill: #ffeb3b;
+  }
+
+  &:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+
+    svg {
+      fill: #ccc;
+    }
   }
 
   svg {

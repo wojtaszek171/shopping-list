@@ -18,6 +18,7 @@ const AppHeader = () => {
   const location = useLocation();
   const { title, buttons } = useContext(HeaderContext);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
   const { t } = useTranslation();
   const [signOut] = useSignOutMutation();
   const {
@@ -90,11 +91,15 @@ const AppHeader = () => {
         ))}
       {isSuccess && (
         <>
-          <button className="header-button" disabled={!didNotificationsLoad}>
+          <button
+            className="header-button"
+            disabled={!didNotificationsLoad}
+            onClick={() => setNotificationsOpen((prev) => !prev)}
+          >
             <NotificationsIcon />
           </button>
           <div className="profile-button" ref={dropdownRef}>
-            <button onClick={handleProfileClick}>
+            <button onClick={handleProfileClick} disabled={!isSuccess}>
               <ProfileIcon />
             </button>
             {showDropdown && (
