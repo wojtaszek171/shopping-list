@@ -94,7 +94,7 @@ const ProductDetailsModal = ({
 
   const unitsOptions = Object.entries(UnitsEnum).map(([key, value]) => ({
     key,
-    value,
+    value: t(`${value}Unit`),
   }));
 
   return (

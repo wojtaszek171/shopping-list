@@ -12,6 +12,7 @@ import {
 import { HeaderContext } from "./HeaderProvider";
 import { useGetNotificationsQuery } from "../../services/api/notifications.api";
 import "./AppHeader.scss";
+import NotificationsPanel from "../NotificationsPanel/NotificationsPanel";
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -98,6 +99,10 @@ const AppHeader = () => {
           >
             <NotificationsIcon />
           </button>
+          {notificationsOpen && (
+            <NotificationsPanel onClose={() => setNotificationsOpen(false)} />
+          )}
+          {/* Profile Icon */}
           <div className="profile-button" ref={dropdownRef}>
             <button onClick={handleProfileClick} disabled={!isSuccess}>
               <ProfileIcon />

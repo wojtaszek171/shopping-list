@@ -15,7 +15,7 @@ import {
   KeyboardEventHandler,
 } from "react";
 import { useContextMenu } from "../../ContextMenu/useContextMenu";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import EditIcon from "../../../assets/icons/edit.svg";
 import InviteIcon from "../../../assets/icons/invite.svg";
 import { useDialog } from "../../Dialog/useDialog";
@@ -157,7 +157,13 @@ const ListItem = ({
       onSecondaryButtonClick: closeDialog,
       content: (
         <>
-          <span>{t("shareListDescription")}</span>
+          <span>
+            <Trans
+              i18nKey="shareListDescription"
+              values={{ listName: list.name }}
+              components={[<b />]}
+            />
+          </span>
           <Input
             type="email"
             placeholder="example@email.com"

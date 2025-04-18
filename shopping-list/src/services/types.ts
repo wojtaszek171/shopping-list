@@ -54,4 +54,44 @@ export interface UpdateProductDto {
   completed?: boolean;
 }
 
-export interface Notification {}
+export interface Notification {
+  _id: string;
+  type: "invitation";
+  sender: {
+    _id: string;
+    fullname: string;
+    username: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  recipient: {
+    _id: string;
+    fullname: string;
+    username: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  read: boolean;
+  message: string;
+  refType: "List";
+  refId: {
+    _id: string;
+    name: string;
+    users: {
+      pending: boolean;
+      user: string;
+      role: "owner" | "collaborator";
+      _id: string;
+    }[];
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
