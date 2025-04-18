@@ -31,7 +31,7 @@
   "pieceUnit": "Штука",
   "kilogramUnit": "Килограмм",
   "literUnit": "Литр",
-  "mililiterUnit": "Миллилитр",
+  "milliliterUnit": "Миллилитр",
   "gramUnit": "Грамм",
   "alcohols": "Алкоголь",
   "medical": "Медицинское",
@@ -62,5 +62,10 @@
   "lShortUnit": "л",
   "pcsShortUnit": "шт",
   "mlShortUnit": "мл",
-  "gShortUnit": "г"
+  "gShortUnit": "г",
+  "sortByName": "Сортировать по имени",
+  "sortByDateAdded": "Сортировать по дате добавления",
+  "sortByCategory": "Сортировать по категории",
+  "ascending": "По возрастанию",
+  "descending": "По убыванию"
 }

@@ -31,7 +31,7 @@
   "pieceUnit": "件",
   "kilogramUnit": "千克",
   "literUnit": "升",
-  "mililiterUnit": "毫升",
+  "milliliterUnit": "毫升",
   "gramUnit": "克",
   "alcohols": "酒类",
   "medical": "医疗",
@@ -62,5 +62,10 @@
   "lShortUnit": "升",
   "pcsShortUnit": "件",
   "mlShortUnit": "毫升",
-  "gShortUnit": "克"
+  "gShortUnit": "克",
+  "sortByName": "按名称排序",
+  "sortByDateAdded": "按添加日期排序",
+  "sortByCategory": "按类别排序",
+  "ascending": "升序",
+  "descending": "降序"
 }

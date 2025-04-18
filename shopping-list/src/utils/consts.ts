@@ -32,5 +32,5 @@ export enum UnitsEnum {
   kg = "kilogram",
   l = "liter",
   ml = "milliliter",
-  g = "gram ",
+  g = "gram",
 }

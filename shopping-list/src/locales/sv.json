@@ -31,7 +31,7 @@
   "pieceUnit": "Styck",
   "kilogramUnit": "Kilogram",
   "literUnit": "Liter",
-  "mililiterUnit": "Milliliter",
+  "milliliterUnit": "Milliliter",
   "gramUnit": "Gram",
   "alcohols": "Alkoholer",
   "medical": "Medicinskt",
@@ -62,5 +62,10 @@
   "lShortUnit": "l",
   "pcsShortUnit": "st",
   "mlShortUnit": "ml",
-  "gShortUnit": "g"
+  "gShortUnit": "g",
+  "sortByName": "Sortera efter namn",
+  "sortByDateAdded": "Sortera efter tilläggsdatum",
+  "sortByCategory": "Sortera efter kategori",
+  "ascending": "Stigande",
+  "descending": "Fallande"
 }

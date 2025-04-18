@@ -13,6 +13,7 @@ import ProductDetailsModal from "../ProductDetailsModal/ProductDetailsModal";
 import useCategories from "../ProductDetailsModal/useCategories";
 import { CategoriesEnum } from "../../../utils/consts";
 import "./ProductItem.scss";
+import { useTranslation } from "react-i18next";
 
 interface ProductItemComponentProps extends Product {
   isSelecting: boolean;
@@ -38,6 +39,7 @@ const ProductItem = ({
     completed,
   } = product;
 
+  const { t } = useTranslation();
   const [updateProduct] = useUpdateProductMutation();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const isTouchDevice = useIsTouch();
@@ -116,7 +118,9 @@ const ProductItem = ({
         />
         <span className="product-name">{name}</span>
         <span className="product-quantity">{quantity}</span>
-        {unit !== "none" && <span className="product-unit">{unit}</span>}
+        {unit !== "none" && (
+          <span className="product-unit">{t(`${unit}ShortUnit`)}</span>
+        )}
         <div className="product-category">
           {getCategory(category as CategoriesEnum).icon}
         </div>

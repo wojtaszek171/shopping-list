@@ -31,7 +31,7 @@
   "pieceUnit": "Piece",
   "kilogramUnit": "Kilogram",
   "literUnit": "Liter",
-  "mililiterUnit": "Milliliter",
+  "milliliterUnit": "Milliliter",
   "gramUnit": "Gram",
   "alcohols": "Alcohols",
   "medical": "Medical",
@@ -62,5 +62,10 @@
   "lShortUnit": "l",
   "pcsShortUnit": "pcs",
   "mlShortUnit": "ml",
-  "gShortUnit": "g"
+  "gShortUnit": "g",
+  "sortByName": "Sort by name",
+  "sortByDateAdded": "Sort by date added",
+  "sortByCategory": "Sort by category",
+  "ascending": "Ascending",
+  "descending": "Descending"
 }
