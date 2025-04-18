@@ -85,6 +85,10 @@
     fill: #ffeb3b;
   }
 
+  &.notifications-active svg {
+    fill: #ffeb3b; // Replace with your desired color
+  }
+
   &:disabled {
     color: #ccc;
     cursor: not-allowed;

@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { cloneElement, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import GoBackIcon from "../../assets/icons/goback.svg";
 import ProfileIcon from "../../assets/icons/profile.svg";
 import NotificationsIcon from "../../assets/icons/notifications.svg";
+import NotificationsIconActive from "../../assets/icons/notifications-active.svg";
 import Dropdown from "../Dropdown/Dropdown";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,8 +12,8 @@ import {
 } from "../../services/api/user.api";
 import { HeaderContext } from "./HeaderProvider";
 import { useGetNotificationsQuery } from "../../services/api/notifications.api";
-import "./AppHeader.scss";
 import NotificationsPanel from "../NotificationsPanel/NotificationsPanel";
+import "./AppHeader.scss";
 
 const AppHeader = () => {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ const AppHeader = () => {
     refetch: checkSession,
   } = useCheckSessionQuery();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { isSuccess: didNotificationsLoad } = useGetNotificationsQuery();
+  const { isSuccess: didNotificationsLoad, data: notifications } =
+    useGetNotificationsQuery();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,6 +68,8 @@ const AppHeader = () => {
     return typeof active === "function" ? active() : active;
   };
 
+  const allRead = notifications?.every((notification) => notification.read);
+
   return (
     <header className="app-header">
       {location.pathname !== "/lists" && (
@@ -84,7 +88,7 @@ const AppHeader = () => {
             style={{ fill: button?.color }}
           >
             {button.icon &&
-              React.cloneElement(button.icon, {
+              cloneElement(button.icon, {
                 style: { fill: button?.color },
               })}
             {button.title}
@@ -93,16 +97,15 @@ const AppHeader = () => {
       {isSuccess && (
         <>
           <button
-            className="header-button"
+            className={`header-button ${!allRead ? "notifications-active" : ""}`}
             disabled={!didNotificationsLoad}
             onClick={() => setNotificationsOpen((prev) => !prev)}
           >
-            <NotificationsIcon />
+            {allRead ? <NotificationsIcon /> : <NotificationsIconActive />}
           </button>
           {notificationsOpen && (
             <NotificationsPanel onClose={() => setNotificationsOpen(false)} />
           )}
-          {/* Profile Icon */}
           <div className="profile-button" ref={dropdownRef}>
             <button onClick={handleProfileClick} disabled={!isSuccess}>
               <ProfileIcon />
