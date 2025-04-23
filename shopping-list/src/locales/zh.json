@@ -24,6 +24,7 @@
   "rename": "重命名",
   "products": "产品",
   "notificationsPanelTitle": "通知面板",
+  "noNotificationsMessage": "没有通知",
   "invite": "邀请",
   "inviteFriend": "邀请朋友",
   "shareListDescription": "要分享列表 <0>{{listName}}</0> 给朋友，请在下面输入他们的电子邮件地址。",
@@ -67,5 +68,7 @@
   "sortByDateAdded": "按添加日期排序",
   "sortByCategory": "按类别排序",
   "ascending": "升序",
-  "descending": "降序"
+  "descending": "降序",
+  "accept": "接受",
+  "decline": "拒绝"
 }

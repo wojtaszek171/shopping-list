@@ -42,20 +42,12 @@ export class ListController {
     @Body() updateListDto: UpdateListDto,
     @Req() req
   ) {
-    const list = await this.listService.findOne(id, req.user.userId);
-    if (!list) {
-      throw new ForbiddenException('You do not have access to this list');
-    }
-    return this.listService.update(id, updateListDto);
+    return this.listService.update(id, updateListDto, req.user.userId);
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req) {
-    const list = await this.listService.findOne(id, req.user.userId);
-    if (!list) {
-      throw new ForbiddenException('You do not have access to this list');
-    }
-    return this.listService.delete(id);
+    return this.listService.delete(id, req.user.userId);
   }
 
   @Post(':id/invite')
@@ -70,5 +62,10 @@ export class ListController {
   @Post(':id/accept-invitation')
   async acceptInvitation(@Param('id') listId: string, @Req() req) {
     return this.listService.acceptInvitation(listId, req.user.userId);
+  }
+
+  @Post(':id/decline-invitation')
+  async declineInvitation(@Param('id') listId: string, @Req() req) {
+    return this.listService.declineInvitation(listId, req.user.userId);
   }
 }

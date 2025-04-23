@@ -10,7 +10,6 @@ import {
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { WsGateway } from '../ws/ws.gateway';
-import { List } from '../list/list.schema';
 
 @Injectable()
 export class NotificationsRepository {
@@ -76,5 +75,15 @@ export class NotificationsRepository {
 
   async deleteByListId(listId: string): Promise<void> {
     await this.notificationsModel.deleteMany({ list: listId }).exec();
+  }
+
+  async deleteByRefId(refId: string): Promise<void> {
+    await this.notificationsModel.deleteMany({ refId }).exec();
+  }
+
+  async readById(id: string): Promise<Notifications | null> {
+    return this.notificationsModel
+      .findByIdAndUpdate(id, { read: true }, { new: true })
+      .exec();
   }
 }

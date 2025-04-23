@@ -1,8 +1,13 @@
 import { useParams } from "react-router-dom";
-import { useGetProductsByListIdQuery } from "../../services/api/product.api";
 import { skipToken } from "@reduxjs/toolkit/query";
-import { useGetListQuery } from "../../services/api/list.api";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import ProductItem from "./ProductItem/ProductItem";
+import {
+  useDeleteProductMutation,
+  useGetProductsByListIdQuery,
+} from "../../services/api/product.api";
+import { useGetListQuery } from "../../services/api/list.api";
 import AddIcon from "../../assets/icons/add.svg";
 import DeleteIcon from "../../assets/icons/delete.svg";
 import SortIcon from "../../assets/icons/sort.svg";
@@ -10,18 +15,16 @@ import MultiSelectIcon from "../../assets/icons/multi-select.svg";
 import Button from "../Button";
 import { useHeader } from "../AppHeader/HeaderProvider";
 import ProductsBrowser from "../ProductsBrowser/ProductsBrowser";
-import ProductItem from "./ProductItem/ProductItem";
 import useIsTouch from "../../hooks/useIsTouch";
 import Dropdown from "../Dropdown/Dropdown";
-import { useTranslation } from "react-i18next";
 import {
   joinListRoom,
   leaveListRoom,
   listenForListRoomEvents,
   removeListRoomListeners,
 } from "../../services/api/ws/listListeners";
+import { type Product } from "../../services/types";
 import "./ListDetailsView.scss";
-import { Product } from "../../services/types";
 
 const ListDetailsView = () => {
   const { id } = useParams();
@@ -39,6 +42,7 @@ const ListDetailsView = () => {
   const { t } = useTranslation();
   const [sortField, setSortField] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<string>("asc");
+  const [deleteProduct] = useDeleteProductMutation();
 
   useEffect(() => {
     if (listData?.name) {
@@ -152,6 +156,17 @@ const ListDetailsView = () => {
     return sortedProducts;
   };
 
+  const handleDeleteProducts = () => {
+    Promise.all(
+      selectedProducts.map((productId) =>
+        deleteProduct({ listId: id!, id: productId }),
+      ),
+    ).then(() => {
+      refetchProducts();
+    });
+    setSelectedProducts([]);
+  };
+
   useEffect(() => {
     setButtons([
       {
@@ -159,7 +174,7 @@ const ListDetailsView = () => {
         icon: <SortIcon />,
       },
       {
-        action: () => {},
+        action: handleDeleteProducts,
         icon: <DeleteIcon />,
         hidden: !selectedProducts.length,
         color: "#e33939",

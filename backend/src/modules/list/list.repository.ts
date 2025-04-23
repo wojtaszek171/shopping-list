@@ -15,14 +15,30 @@ export class ListRepository {
 
   async findAll(userId: string): Promise<ListDocument[]> {
     return this.listModel
-      .find({ 'users.user': userId })
+      .find({ users: { $elemMatch: { user: userId, pending: false } } }) // Match userId and pending: false
       .populate('users.user')
       .exec();
   }
 
   async findOne(id: string, userId: string): Promise<ListDocument | null> {
     return this.listModel
-      .findOne({ _id: id, 'users.user': userId })
+      .findOne({
+        _id: id,
+        users: { $elemMatch: { user: userId, pending: false } }
+      })
+      .populate('users.user')
+      .exec();
+  }
+
+  async findOnePendingUser(
+    id: string,
+    userId: string
+  ): Promise<ListDocument | null> {
+    return this.listModel
+      .findOne({
+        _id: id,
+        users: { $elemMatch: { user: userId, pending: true } }
+      })
       .populate('users.user')
       .exec();
   }
@@ -67,6 +83,19 @@ export class ListRepository {
         { new: true }
       )
       .populate('users.user')
+      .exec();
+  }
+
+  async removeUser(
+    listId: string,
+    userId: string
+  ): Promise<ListDocument | null> {
+    return this.listModel
+      .findOneAndUpdate(
+        { _id: listId },
+        { $pull: { users: { user: userId } } },
+        { new: true }
+      )
       .exec();
   }
 }

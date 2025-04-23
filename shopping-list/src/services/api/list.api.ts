@@ -45,6 +45,20 @@ export const listApi = api.injectEndpoints({
       }),
       invalidatesTags: ["List"],
     }),
+    acceptInvitation: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `lists/${id}/accept-invitation`,
+        method: "POST",
+      }),
+      invalidatesTags: ["List"],
+    }),
+    declineInvitation: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `lists/${id}/decline-invitation`,
+        method: "POST",
+      }),
+      invalidatesTags: ["List"],
+    }),
   }),
 });
 
@@ -56,4 +70,6 @@ export const {
   useEditListMutation,
   useInviteToListMutation,
   useRemoveListMutation,
+  useAcceptInvitationMutation,
+  useDeclineInvitationMutation,
 } = listApi;

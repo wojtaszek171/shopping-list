@@ -67,5 +67,9 @@
   "sortByDateAdded": "Sort by date added",
   "sortByCategory": "Sort by category",
   "ascending": "Ascending",
-  "descending": "Descending"
+  "descending": "Descending",
+  "invitationNotificationMessage": "You have been invited to list <0>{{listName}}</0> by <0>{{inviterName}}</0>.",
+  "noNotificationsMessage": "No notifications",
+  "accept": "Accept",
+  "decline": "Decline"
 }

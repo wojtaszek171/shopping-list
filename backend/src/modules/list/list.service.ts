@@ -1,7 +1,8 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException
+  NotFoundException,
+  ForbiddenException
 } from '@nestjs/common';
 import { ListRepository } from './list.repository';
 import { ProductRepository } from '../product/product.repository';
@@ -26,7 +27,7 @@ export class ListService {
     if (!userId) throw new NotFoundException('User ID is required');
     const list = {
       ...listDto,
-      users: [{ user: userId, role: UserRole.OWNER }]
+      users: [{ user: userId, role: UserRole.OWNER, pending: false }] // Ensure pending is false for the owner
     };
     const createdList = await this.listRepository.create(list);
     return createdList;
@@ -65,13 +66,39 @@ export class ListService {
     };
   }
 
-  async update(id: string, updateDto: UpdateListDto) {
+  async update(id: string, updateDto: UpdateListDto, userId: string) {
+    const list = await this.listRepository.findOne(id, userId);
+    if (!list) {
+      throw new NotFoundException('List not found');
+    }
+
+    const isOwner = list.users.some(
+      (user) =>
+        user.user._id.toString() === userId && user.role === UserRole.OWNER
+    );
+    if (!isOwner) {
+      throw new ForbiddenException('Only the owner can update the list');
+    }
+
     const updatedList = await this.listRepository.update(id, updateDto);
     this.wsGateway.emitListUpdated(id);
     return updatedList;
   }
 
-  async delete(id: string) {
+  async delete(id: string, userId: string) {
+    const list = await this.listRepository.findOne(id, userId);
+    if (!list) {
+      throw new NotFoundException('List not found');
+    }
+
+    const isOwner = list.users.some(
+      (user) =>
+        user.user._id.toString() === userId && user.role === UserRole.OWNER
+    );
+    if (!isOwner) {
+      throw new ForbiddenException('Only the owner can delete the list');
+    }
+
     const deletedList = await this.listRepository.delete(id);
     if (deletedList) {
       await this.productRepository.deleteByListId(id);
@@ -81,23 +108,20 @@ export class ListService {
   }
 
   async inviteUserByEmail(listId: string, email: string, ownerId: string) {
-    // Check if the user exists
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    // Find the list
     const list = await this.listRepository.findOne(listId, ownerId);
     if (!list) {
       throw new NotFoundException('List not found');
     }
 
-    // Add the user to the list with pending: false
     const invitedUser = {
       user: user._id.toString(),
       role: UserRole.COLLABORATOR,
-      pending: false
+      pending: true
     };
     const updatedList = await this.listRepository.addUser(listId, invitedUser);
 
@@ -105,7 +129,6 @@ export class ListService {
       throw new ConflictException('User is already invited to this list');
     }
 
-    // Create a notification for the invited user
     const message = `You have been invited to collaborate on the list: ${list.name}`;
     await this.notificationsRepository.createInvitationNotification(
       ownerId,
@@ -118,25 +141,29 @@ export class ListService {
   }
 
   async acceptInvitation(listId: string, userId: string) {
-    // Find the list
-    const list = await this.listRepository.findOne(listId, userId);
+    const list = await this.listRepository.findOnePendingUser(listId, userId);
     if (!list) {
-      throw new NotFoundException('List not found or access denied');
+      throw new NotFoundException('No pending invitation found for this user');
     }
 
-    // Check if the user is in the list and has a pending invitation
-    const userInList = list.users.find(
-      (user) => user.user.toString() === userId && user.pending
-    );
-    if (!userInList) {
-      throw new ConflictException('No pending invitation found for this user');
-    }
-
-    // Update the user's pending status to false
     await this.listRepository.updateUserStatus(listId, userId, {
       pending: false
     });
 
+    await this.notificationsRepository.deleteByRefId(listId);
+
     return { message: 'Invitation accepted successfully' };
+  }
+
+  async declineInvitation(listId: string, userId: string) {
+    const list = await this.listRepository.findOnePendingUser(listId, userId);
+
+    if (list) {
+      await this.listRepository.removeUser(listId, userId);
+    }
+
+    await this.notificationsRepository.deleteByRefId(listId);
+
+    return { message: 'Invitation declined successfully' };
   }
 }
