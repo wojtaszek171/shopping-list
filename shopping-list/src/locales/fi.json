@@ -24,6 +24,7 @@
   "rename": "Nimeä uudelleen",
   "products": "Tuotteet",
   "notificationsPanelTitle": "Ilmoituspaneeli",
+  "noNotificationsMessage": "Ei ilmoituksia",
   "invite": "Kutsu",
   "inviteFriend": "Kutsu ystäviä",
   "shareListDescription": "Jaa lista <0>{{listName}}</0> ystävälle kirjoittamalla hänen sähköpostiosoitteensa alle.",

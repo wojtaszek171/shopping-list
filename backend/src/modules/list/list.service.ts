@@ -26,7 +26,7 @@ export class ListService {
     if (!userId) throw new NotFoundException('User ID is required');
     const list = {
       ...listDto,
-      users: [{ user: userId, role: UserRole.OWNER }]
+      users: [{ user: userId, role: UserRole.OWNER, pending: false }] // Ensure pending is false for the owner
     };
     const createdList = await this.listRepository.create(list);
     return createdList;
@@ -97,7 +97,7 @@ export class ListService {
     const invitedUser = {
       user: user._id.toString(),
       role: UserRole.COLLABORATOR,
-      pending: false
+      pending: true
     };
     const updatedList = await this.listRepository.addUser(listId, invitedUser);
 
@@ -119,17 +119,9 @@ export class ListService {
 
   async acceptInvitation(listId: string, userId: string) {
     // Find the list
-    const list = await this.listRepository.findOne(listId, userId);
+    const list = await this.listRepository.findOnePendingUser(listId, userId);
     if (!list) {
-      throw new NotFoundException('List not found or access denied');
-    }
-
-    // Check if the user is in the list and has a pending invitation
-    const userInList = list.users.find(
-      (user) => user.user.toString() === userId && user.pending
-    );
-    if (!userInList) {
-      throw new ConflictException('No pending invitation found for this user');
+      throw new NotFoundException('No pending invitation found for this user');
     }
 
     // Update the user's pending status to false
@@ -137,6 +129,23 @@ export class ListService {
       pending: false
     });
 
+    // Remove the associated invitation notification
+    await this.notificationsRepository.deleteByRefId(listId);
+
     return { message: 'Invitation accepted successfully' };
+  }
+
+  async declineInvitation(listId: string, userId: string) {
+    const list = await this.listRepository.findOnePendingUser(listId, userId);
+
+    if (list) {
+      // Remove the user from the list
+      await this.listRepository.removeUser(listId, userId);
+    }
+
+    // Remove the associated invitation notification
+    await this.notificationsRepository.deleteByRefId(listId);
+
+    return { message: 'Invitation declined successfully' };
   }
 }

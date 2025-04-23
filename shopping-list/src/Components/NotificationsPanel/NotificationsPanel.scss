@@ -42,8 +42,19 @@
   }
 
   .notification-item {
+    display: flex;
+    flex-direction: row;
     padding: 10px;
     border-bottom: 1px solid #eee;
+
+    .notification-item-content {
+      flex: 1;
+    }
+
+    .notification-item-actions {
+      display: flex;
+      flex-direction: column;
+    }
   }
 
   .notification-item:last-child {
@@ -55,7 +66,7 @@
     font-size: 14px;
   }
 
-  .notification-item span {
+  .notification-item-date {
     font-size: 12px;
     color: #888;
   }
@@ -66,5 +77,21 @@
     padding: 20px;
     font-size: 14px;
     color: #666;
+  }
+
+  .notification-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+
+    .notification-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+  }
+
+  .notification-info-strong {
+    font-weight: bold;
   }
 }

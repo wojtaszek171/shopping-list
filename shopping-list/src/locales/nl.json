@@ -24,6 +24,7 @@
   "rename": "Hernoemen",
   "products": "Producten",
   "notificationsPanelTitle": "Meldingen",
+  "noNotificationsMessage": "Geen meldingen",
   "invite": "Uitnodigen",
   "inviteFriend": "Vrienden uitnodigen",
   "shareListDescription": "Om de lijst <0>{{listName}}</0> te delen met een vriend, voer hieronder hun e-mailadres in.",

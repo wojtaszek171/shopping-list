@@ -24,6 +24,7 @@
   "rename": "Renombrar",
   "products": "Productos",
   "notificationsPanelTitle": "Panel de notificaciones",
+  "noNotificationsMessage": "Sin notificaciones",
   "invite": "Invitar",
   "inviteFriend": "Invitar amigos",
   "shareListDescription": "Para compartir la lista <0>{{listName}}</0> con un amigo, ingresa su correo electrónico a continuación.",

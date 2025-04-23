@@ -71,4 +71,9 @@ export class ListController {
   async acceptInvitation(@Param('id') listId: string, @Req() req) {
     return this.listService.acceptInvitation(listId, req.user.userId);
   }
+
+  @Post(':id/decline-invitation')
+  async declineInvitation(@Param('id') listId: string, @Req() req) {
+    return this.listService.declineInvitation(listId, req.user.userId);
+  }
 }

@@ -42,6 +42,11 @@ export class NotificationsController {
     return this.notificationsRepository.update(id, updateNotificationsDto);
   }
 
+  @Put(':id/read')
+  async readById(@Param('id') id: string) {
+    return this.notificationsRepository.readById(id);
+  }
+
   @Delete(':id')
   async delete(@Param('id') id: string) {
     return this.notificationsRepository.delete(id);

@@ -24,6 +24,7 @@
   "rename": "名前を変更",
   "products": "製品",
   "notificationsPanelTitle": "通知パネル",
+  "noNotificationsMessage": "通知なし",
   "invite": "招待",
   "inviteFriend": "友達を招待",
   "shareListDescription": "リスト <0>{{listName}}</0> を友達と共有するには、以下にメールアドレスを入力してください。",

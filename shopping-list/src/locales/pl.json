@@ -24,6 +24,7 @@
   "rename": "Zmień nazwę",
   "products": "Produkty",
   "notificationsPanelTitle": "Panel powiadomień",
+  "noNotificationsMessage": "Brak powiadomień",
   "invite": "Zaproś",
   "inviteFriend": "Zaproś znajomych",
   "shareListDescription": "Aby udostępnić listę <0>{{listName}}</0> znajomemu, wprowadź jego adres e-mail poniżej.",

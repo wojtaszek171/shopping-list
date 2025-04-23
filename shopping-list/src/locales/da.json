@@ -24,6 +24,7 @@
   "rename": "Omdøb",
   "products": "Produkter",
   "notificationsPanelTitle": "Notifikationspanel",
+  "noNotificationsMessage": "Ingen meddelelser",
   "invite": "Inviter",
   "inviteFriend": "Inviter venner",
   "shareListDescription": "For at dele listen <0>{{listName}}</0> med en ven, indtast deres e-mailadresse nedenfor.",

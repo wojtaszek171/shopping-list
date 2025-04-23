@@ -24,6 +24,7 @@
   "rename": "이름 변경",
   "products": "제품",
   "notificationsPanelTitle": "알림 패널",
+  "noNotificationsMessage": "알림 없음",
   "invite": "초대",
   "inviteFriend": "친구 초대",
   "shareListDescription": "목록 <0>{{listName}}</0>을(를) 친구와 공유하려면 아래에 이메일 주소를 입력하세요.",

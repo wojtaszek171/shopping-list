@@ -24,6 +24,7 @@
   "rename": "Umbenennen",
   "products": "Produkte",
   "notificationsPanelTitle": "Benachrichtigungspanel",
+  "noNotificationsMessage": "Keine Benachrichtigungen",
   "invite": "Einladen",
   "inviteFriend": "Freunde einladen",
   "shareListDescription": "Um die Liste <0>{{listName}}</0> mit einem Freund zu teilen, geben Sie unten seine E-Mail-Adresse ein.",
